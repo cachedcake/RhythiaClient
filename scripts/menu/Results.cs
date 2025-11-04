@@ -24,7 +24,7 @@ public partial class Results : Control
 		DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Mailbox);
 
 		Cursor.Texture = Phoenyx.Skin.CursorImage;
-		Cursor.Size = new Vector2(32 * (float)Phoenyx.Settings.CursorScale, 32 * (float)Phoenyx.Settings.CursorScale);
+		Cursor.Size = new Vector2(32 * (float)SettingsProfile.CursorScale, 32 * (float)SettingsProfile.CursorScale);
 
 		Holder.GetNode<Label>("Title").Text = (Runner.CurrentAttempt.IsReplay ? "[REPLAY] " : "") + Runner.CurrentAttempt.Map.PrettyTitle;
 		Holder.GetNode<Label>("Difficulty").Text = Runner.CurrentAttempt.Map.DifficultyName;
@@ -144,7 +144,7 @@ public partial class Results : Control
 
 	public static void UpdateVolume()
 	{
-		SoundManager.Song.VolumeDb = -80 + 70 * (float)Math.Pow(Phoenyx.Settings.VolumeMusic / 100, 0.1) * (float)Math.Pow(Phoenyx.Settings.VolumeMaster / 100, 0.1);
+		SoundManager.Song.VolumeDb = -80 + 70 * (float)Math.Pow(SettingsProfile.VolumeMusic / 100, 0.1) * (float)Math.Pow(SettingsProfile.VolumeMaster / 100, 0.1);
 	}
 
 	public static void Replay()

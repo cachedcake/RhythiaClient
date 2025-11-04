@@ -237,7 +237,7 @@ public partial class MainMenu : Control
 		FavoritedMaps = [];
 
 		Cursor.Texture = Phoenyx.Skin.CursorImage;
-		Cursor.Size = new Vector2(32 * (float)Phoenyx.Settings.CursorScale, 32 * (float)Phoenyx.Settings.CursorScale);
+		Cursor.Size = new Vector2(32 * (float)SettingsProfile.CursorScale, 32 * (float)SettingsProfile.CursorScale);
 
 		Godot.Collections.Array<Node> jukeboxBars = JukeboxSpectrum.GetChildren();
 
@@ -715,7 +715,7 @@ public partial class MainMenu : Control
 		if (!SoundManager.Song.Playing)
 		{
 			SoundManager.PlayJukebox();
-			SoundManager.JukeboxPaused = !Phoenyx.Settings.AutoplayJukebox;
+			SoundManager.JukeboxPaused = !SettingsProfile.AutoplayJukebox;
 		}
 		else
 		{
@@ -763,7 +763,7 @@ public partial class MainMenu : Control
 		if (SoundManager.Song.Stream != null)
 		{
 			JukeboxProgress.AnchorRight = (float)Math.Clamp(SoundManager.Song.GetPlaybackPosition() / SoundManager.Song.Stream.GetLength(), 0, 1);
-			SoundManager.Song.VolumeDb = Mathf.Lerp(SoundManager.Song.VolumeDb, Phoenyx.Util.Quitting ? -80 : -80 + 70 * (float)Math.Pow(Phoenyx.Settings.VolumeMusic / 100, 0.1) * (float)Math.Pow(Phoenyx.Settings.VolumeMaster / 100, 0.1), (float)Math.Clamp(delta * 2, 0, 1));
+			SoundManager.Song.VolumeDb = Mathf.Lerp(SoundManager.Song.VolumeDb, Phoenyx.Util.Quitting ? -80 : -80 + 70 * (float)Math.Pow(SettingsProfile.VolumeMusic / 100, 0.1) * (float)Math.Pow(SettingsProfile.VolumeMaster / 100, 0.1), (float)Math.Clamp(delta * 2, 0, 1));
 		}
 
 		float prevHz = 0;
@@ -1236,7 +1236,7 @@ public partial class MainMenu : Control
 
 	public static void UpdateVolume()
 	{
-		SettingsManager.Holder.GetNode("Categories").GetNode("Audio").GetNode("Container").GetNode("VolumeMaster").GetNode<HSlider>("HSlider").Value = Phoenyx.Settings.VolumeMaster;
+		SettingsManager.Holder.GetNode("Categories").GetNode("Audio").GetNode("Container").GetNode("VolumeMaster").GetNode<HSlider>("HSlider").Value = SettingsProfile.VolumeMaster;
 	}
 
 	public static void UpdateMapList()

@@ -11,7 +11,8 @@ public partial class SceneManager : Node
     {
         Node = this;
 
-        Node.GetTree().Connect("node_added", Callable.From((Node child) => {
+        Node.GetTree().Connect("node_added", Callable.From((Node child) =>
+        {
             if (child.Name != "SceneMenu" && child.Name != "SceneGame" && child.Name != "SceneResults")
             {
                 return;
@@ -45,7 +46,8 @@ public partial class SceneManager : Node
             ColorRect outTransition = Scene.GetNode<ColorRect>("Transition");
             Tween outTween = outTransition.CreateTween();
             outTween.TweenProperty(outTransition, "self_modulate", Color.FromHtml("ffffffff"), 0.25).SetTrans(Tween.TransitionType.Quad);
-            outTween.TweenCallback(Callable.From(() => {
+            outTween.TweenCallback(Callable.From(() =>
+            {
                 Node.GetTree().ChangeSceneToFile(path);
             }));
             outTween.Play();

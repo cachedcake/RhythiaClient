@@ -12,13 +12,13 @@ public partial class Renderer : MultiMeshInstance3D
 
         Multimesh.InstanceCount = Runner.ToProcess;
 
-        float ar = (float)(Runner.CurrentAttempt.IsReplay ? Runner.CurrentAttempt.Replays[0].ApproachRate : Phoenyx.Settings.ApproachRate);
-        float ad = (float)(Runner.CurrentAttempt.IsReplay ? Runner.CurrentAttempt.Replays[0].ApproachDistance : Phoenyx.Settings.ApproachDistance);
+        float ar = (float)(Runner.CurrentAttempt.IsReplay ? Runner.CurrentAttempt.Replays[0].ApproachRate : SettingsProfile.ApproachRate);
+        float ad = (float)(Runner.CurrentAttempt.IsReplay ? Runner.CurrentAttempt.Replays[0].ApproachDistance : SettingsProfile.ApproachDistance);
         float at = ad / ar;
-        float fadeIn = (float)(Runner.CurrentAttempt.IsReplay ? Runner.CurrentAttempt.Replays[0].FadeIn : Phoenyx.Settings.FadeIn);
-        bool fadeOut = Runner.CurrentAttempt.IsReplay ? Runner.CurrentAttempt.Replays[0].FadeOut : Phoenyx.Settings.FadeOut;
-        bool pushback = Runner.CurrentAttempt.IsReplay ? Runner.CurrentAttempt.Replays[0].Pushback : Phoenyx.Settings.Pushback;
-        float noteSize = (float)(Runner.CurrentAttempt.IsReplay ? Runner.CurrentAttempt.Replays[0].NoteSize : Phoenyx.Settings.NoteSize);
+        float fadeIn = (float)(Runner.CurrentAttempt.IsReplay ? Runner.CurrentAttempt.Replays[0].FadeIn : SettingsProfile.FadeIn);
+        bool fadeOut = Runner.CurrentAttempt.IsReplay ? Runner.CurrentAttempt.Replays[0].FadeOut : SettingsProfile.FadeOut;
+        bool pushback = Runner.CurrentAttempt.IsReplay ? Runner.CurrentAttempt.Replays[0].Pushback : SettingsProfile.Pushback;
+        float noteSize = (float)(Runner.CurrentAttempt.IsReplay ? Runner.CurrentAttempt.Replays[0].NoteSize : SettingsProfile.NoteSize);
         Transform3D transform = new(new Vector3(noteSize / 2, 0, 0), new Vector3(0, noteSize / 2, 0), new Vector3(0, 0, noteSize / 2), Vector3.Zero);
         
         for (int i = 0; i < Runner.ToProcess; i++)

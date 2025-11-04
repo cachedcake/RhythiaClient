@@ -73,16 +73,16 @@ public partial class SettingsManager : Control
 			string profile = profiles.GetItemText((int)item);
 
 			HideMouse();
-			Phoenyx.Settings.Save();
+			SettingsProfile.Save();
 			File.WriteAllText($"{Constants.USER_FOLDER}/current_profile.txt", profile);
-			Phoenyx.Settings.Load(profile);
+			SettingsProfile.Load(profile);
 			UpdateSettings();
 		};
 
 		skins.Pressed += ShowMouse;
 		skins.ItemSelected += (long item) => {
 			HideMouse();
-			Phoenyx.Settings.Skin = skins.GetItemText((int)item);
+			SettingsProfile.Skin = skins.GetItemText((int)item);
 			Phoenyx.Skin.Load();
 
 			if (SceneManager.Scene.Name == "SceneMenu")
@@ -96,11 +96,11 @@ public partial class SettingsManager : Control
 		spaces.Pressed += ShowMouse;
 		spaces.ItemSelected += (long item) => {
 			HideMouse();
-			Phoenyx.Settings.Space = spaces.GetItemText((int)item);
+			SettingsProfile.Space = spaces.GetItemText((int)item);
 		};
 
 		Holder.GetNode("Categories").GetNode("Visuals").GetNode("Container").GetNode("Skin").GetNode<Button>("SkinFolder").Pressed += () => {
-			OS.ShellOpen($"{Constants.USER_FOLDER}/skins/{Phoenyx.Settings.Skin}");
+			OS.ShellOpen($"{Constants.USER_FOLDER}/skins/{SettingsProfile.Skin}");
 		};
 		Holder.GetNode("Categories").GetNode("Other").GetNode("Container").GetNode("RhythiaImport").GetNode<Button>("Button").Pressed += () => {
 			if (!Directory.Exists($"{OS.GetDataDir()}/SoundSpacePlus") || !File.Exists($"{OS.GetDataDir()}/SoundSpacePlus/settings.json"))
@@ -112,23 +112,23 @@ public partial class SettingsManager : Control
 			Godot.FileAccess file = Godot.FileAccess.Open($"{OS.GetDataDir()}/SoundSpacePlus/settings.json", Godot.FileAccess.ModeFlags.Read);
 			Godot.Collections.Dictionary data = (Godot.Collections.Dictionary)Json.ParseString(file.GetAsText());
 
-			Phoenyx.Settings.ApproachRate = (float)data["approach_rate"];
-			Phoenyx.Settings.ApproachDistance = (float)data["spawn_distance"];
-			Phoenyx.Settings.ApproachTime = Phoenyx.Settings.ApproachDistance / Phoenyx.Settings.ApproachRate;
-			Phoenyx.Settings.FoV = (float)data["fov"];
-			Phoenyx.Settings.Sensitivity = (float)data["sensitivity"] * 2;
-			Phoenyx.Settings.Parallax = (float)data["parallax"] / 50;
-			Phoenyx.Settings.FadeIn = (float)data["fade_length"] * 100;
-			Phoenyx.Settings.FadeOut = (bool)data["half_ghost"];
-			Phoenyx.Settings.Pushback = (bool)data["do_note_pushback"];
-			Phoenyx.Settings.NoteSize = (float)data["note_size"] * 0.875f;
-			Phoenyx.Settings.CursorScale = (float)data["cursor_scale"];
-			Phoenyx.Settings.CursorTrail = (bool)data["cursor_trail"];
-			Phoenyx.Settings.TrailTime = (float)data["trail_time"];
-			Phoenyx.Settings.SimpleHUD = (bool)data["simple_hud"];
-			Phoenyx.Settings.AbsoluteInput = (bool)data["absolute_mode"];
-			Phoenyx.Settings.FPS = (double)data["fps"];
-			Phoenyx.Settings.UnlockFPS = (bool)data["unlock_fps"];
+			SettingsProfile.ApproachRate = (float)data["approach_rate"];
+			SettingsProfile.ApproachDistance = (float)data["spawn_distance"];
+			SettingsProfile.ApproachTime = SettingsProfile.ApproachDistance / SettingsProfile.ApproachRate;
+			SettingsProfile.FoV = (float)data["fov"];
+			SettingsProfile.Sensitivity = (float)data["sensitivity"] * 2;
+			SettingsProfile.Parallax = (float)data["parallax"] / 50;
+			SettingsProfile.FadeIn = (float)data["fade_length"] * 100;
+			SettingsProfile.FadeOut = (bool)data["half_ghost"];
+			SettingsProfile.Pushback = (bool)data["do_note_pushback"];
+			SettingsProfile.NoteSize = (float)data["note_size"] * 0.875f;
+			SettingsProfile.CursorScale = (float)data["cursor_scale"];
+			SettingsProfile.CursorTrail = (bool)data["cursor_trail"];
+			SettingsProfile.TrailTime = (float)data["trail_time"];
+			SettingsProfile.SimpleHUD = (bool)data["simple_hud"];
+			SettingsProfile.AbsoluteInput = (bool)data["absolute_mode"];
+			SettingsProfile.FPS = (double)data["fps"];
+			SettingsProfile.UnlockFPS = (bool)data["unlock_fps"];
 
 			UpdateSettings();
 
@@ -169,102 +169,102 @@ public partial class SettingsManager : Control
 		switch (setting)
 		{
 			case "Sensitivity":
-				Phoenyx.Settings.Sensitivity = (double)value;
+				SettingsProfile.Sensitivity = (double)value;
 				break;
 			case "ApproachRate":
-				Phoenyx.Settings.ApproachRate = (double)value;
-				Phoenyx.Settings.ApproachTime = Phoenyx.Settings.ApproachDistance / Phoenyx.Settings.ApproachRate;
+				SettingsProfile.ApproachRate = (double)value;
+				SettingsProfile.ApproachTime = SettingsProfile.ApproachDistance / SettingsProfile.ApproachRate;
 				break;
 			case "ApproachDistance":
-				Phoenyx.Settings.ApproachDistance = (double)value;
-				Phoenyx.Settings.ApproachTime = Phoenyx.Settings.ApproachDistance / Phoenyx.Settings.ApproachRate;
+				SettingsProfile.ApproachDistance = (double)value;
+				SettingsProfile.ApproachTime = SettingsProfile.ApproachDistance / SettingsProfile.ApproachRate;
 				break;
 			case "FadeIn":
-				Phoenyx.Settings.FadeIn = (double)value;
+				SettingsProfile.FadeIn = (double)value;
 				break;
 			case "Parallax":
-				Phoenyx.Settings.Parallax = (double)value;
+				SettingsProfile.Parallax = (double)value;
 				break;
 			case "FoV":
-				Phoenyx.Settings.FoV = (double)value;
+				SettingsProfile.FoV = (double)value;
 				break;
 			case "VolumeMaster":
-				Phoenyx.Settings.VolumeMaster = (double)value;
+				SettingsProfile.VolumeMaster = (double)value;
 				break;
 			case "VolumeMusic":
-				Phoenyx.Settings.VolumeMusic = (double)value;
+				SettingsProfile.VolumeMusic = (double)value;
 				break;
 			case "VolumeSFX":
-				Phoenyx.Settings.VolumeSFX = (double)value;
+				SettingsProfile.VolumeSFX = (double)value;
 				break;
 			case "AlwaysPlayHitSound":
-				Phoenyx.Settings.AlwaysPlayHitSound = (bool)value;
+				SettingsProfile.AlwaysPlayHitSound = (bool)value;
 				break;
 			case "NoteSize":
-				Phoenyx.Settings.NoteSize = (double)value;
+				SettingsProfile.NoteSize = (double)value;
 				break;
 			case "CursorScale":
-				Phoenyx.Settings.CursorScale = (double)value;
+				SettingsProfile.CursorScale = (double)value;
 				
 				if (SceneManager.Scene.Name == "SceneMenu")
 				{
-					Menu.MainMenu.Cursor.Size = new Vector2(32 * (float)Phoenyx.Settings.CursorScale, 32 * (float)Phoenyx.Settings.CursorScale);
+					Menu.MainMenu.Cursor.Size = new Vector2(32 * (float)SettingsProfile.CursorScale, 32 * (float)SettingsProfile.CursorScale);
 				}
 
 				break;
 			case "FadeOut":
-				Phoenyx.Settings.FadeOut = (bool)value;
+				SettingsProfile.FadeOut = (bool)value;
 				break;
 			case "Pushback":
-				Phoenyx.Settings.Pushback = (bool)value;
+				SettingsProfile.Pushback = (bool)value;
 				break;
 			case "Fullscreen":
-				Phoenyx.Settings.Fullscreen = (bool)value;
+				SettingsProfile.Fullscreen = (bool)value;
 				DisplayServer.WindowSetMode((bool)value ? DisplayServer.WindowMode.ExclusiveFullscreen : DisplayServer.WindowMode.Windowed);
 				break;
 			case "CursorTrail":
-				Phoenyx.Settings.CursorTrail = (bool)value;
+				SettingsProfile.CursorTrail = (bool)value;
 				break;
 			case "TrailTime":
-				Phoenyx.Settings.TrailTime = (double)value;
+				SettingsProfile.TrailTime = (double)value;
 				break;
 			case "TrailDetail":
-				Phoenyx.Settings.TrailDetail = (double)value;
+				SettingsProfile.TrailDetail = (double)value;
 				break;
 			case "CursorDrift":
-				Phoenyx.Settings.CursorDrift = (bool)value;
+				SettingsProfile.CursorDrift = (bool)value;
 				break;
 			case "VideoDim":
-				Phoenyx.Settings.VideoDim = (double)value;
+				SettingsProfile.VideoDim = (double)value;
 				break;
 			case "VideoRenderScale":
-				Phoenyx.Settings.VideoRenderScale = (double)value;
+				SettingsProfile.VideoRenderScale = (double)value;
 				break;
 			case "SimpleHUD":
-				Phoenyx.Settings.SimpleHUD = (bool)value;
+				SettingsProfile.SimpleHUD = (bool)value;
 				break;
 			case "AutoplayJukebox":
-				Phoenyx.Settings.AutoplayJukebox = (bool)value;
+				SettingsProfile.AutoplayJukebox = (bool)value;
 				break;
 			case "AbsoluteInput":
-				Phoenyx.Settings.AbsoluteInput = (bool)value;
+				SettingsProfile.AbsoluteInput = (bool)value;
 				break;
 			case "RecordReplays":
-				Phoenyx.Settings.RecordReplays = (bool)value;
+				SettingsProfile.RecordReplays = (bool)value;
 				break;
 			case "HitPopups":
-				Phoenyx.Settings.HitPopups = (bool)value;
+				SettingsProfile.HitPopups = (bool)value;
 				break;
 			case "MissPopups":
-				Phoenyx.Settings.MissPopups = (bool)value;
+				SettingsProfile.MissPopups = (bool)value;
 				break;
 			case "FPS":
-				Phoenyx.Settings.FPS = (double)value;
-				Engine.MaxFps = Phoenyx.Settings.UnlockFPS ? 0 : Convert.ToInt32(value);
+				SettingsProfile.FPS = (double)value;
+				Engine.MaxFps = SettingsProfile.UnlockFPS ? 0 : Convert.ToInt32(value);
 				break;
 			case "UnlockFPS":
-				Phoenyx.Settings.UnlockFPS = (bool)value;
-				Engine.MaxFps = Phoenyx.Settings.UnlockFPS ? 0 : Convert.ToInt32(Phoenyx.Settings.FPS);
+				SettingsProfile.UnlockFPS = (bool)value;
+				Engine.MaxFps = SettingsProfile.UnlockFPS ? 0 : Convert.ToInt32(SettingsProfile.FPS);
 				break;
 		}
 
@@ -283,7 +283,7 @@ public partial class SettingsManager : Control
 
 		for (int i = 0; i < spaces.ItemCount; i++)
 		{
-			if (spaces.GetItemText(i) == Phoenyx.Settings.Space)
+			if (spaces.GetItemText(i) == SettingsProfile.Space)
 			{
 				spaces.Selected = i;
 				break;
@@ -298,7 +298,7 @@ public partial class SettingsManager : Control
 			
 			skins.AddItem(name, j);
 
-			if (Phoenyx.Settings.Skin == name)
+			if (SettingsProfile.Skin == name)
 			{
 				skins.Selected = j;
 			}
@@ -326,7 +326,7 @@ public partial class SettingsManager : Control
 		{
 			foreach (Panel option in category.GetNode("Container").GetChildren())
 			{
-				var property = new Phoenyx.Settings().GetType().GetProperty(option.Name);
+				var property = new SettingsProfile().GetType().GetProperty(option.Name);
 				
 				if (option.FindChild("HSlider") != null)
 				{

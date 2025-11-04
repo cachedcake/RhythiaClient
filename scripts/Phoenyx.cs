@@ -9,109 +9,6 @@ using System.Reflection;
 
 public partial class Phoenyx : Node
 {
-	public struct Settings
-	{
-		public static bool Fullscreen {get; set;} = false;
-		public static double VolumeMaster {get; set;} = 50;
-		public static double VolumeMusic {get; set;} = 50;
-		public static double VolumeSFX {get; set;} = 50;
-		public static bool AutoplayJukebox {get; set;} = true;
-		public static bool AlwaysPlayHitSound {get; set;} = false;
-		public static string Skin {get; set;} = "default";
-		public static double FoV {get; set;} = 70;
-		public static double Sensitivity {get; set;} = 0.5;
-		public static double Parallax {get; set;} = 0.1;
-		public static double ApproachRate {get; set;} = 32;
-		public static double ApproachDistance {get; set;} = 20;
-		public static double ApproachTime {get; set;} = ApproachDistance / ApproachRate;
-		public static double FadeIn {get; set;} = 15;
-		public static bool FadeOut {get; set;} = true;
-		public static bool Pushback {get; set;} = true;
-		public static double NoteSize {get; set;} = 0.875;
-		public static double CursorScale {get; set;} = 1;
-		public static bool CursorTrail {get; set;} = false;
-		public static double TrailTime {get; set;} = 0.05;
-		public static double TrailDetail {get; set;} = 1;
-		public static bool CursorDrift {get; set;} = true;
-		public static double VideoDim {get; set;} = 80;
-		public static double VideoRenderScale {get; set;} = 100;
-		public static bool SimpleHUD {get; set;} = false;
-		public static string Space {get; set;} = "skin";
-		public static bool AbsoluteInput {get; set;} = false;
-		public static bool RecordReplays {get; set;} = true;
-		public static bool HitPopups {get; set;} = true;
-		public static bool MissPopups {get; set;} = true;
-		public static double FPS {get; set;} = 240;
-		public static bool UnlockFPS {get; set;} = true;
-
-		public static void Save(string profile = null)
-		{
-			profile ??= Util.GetProfile();
-
-			Dictionary data = new(){
-				["_Version"] = 1
-			};
-
-			foreach (PropertyInfo property in typeof(Settings).GetProperties())
-			{
-				data[property.Name] = (Variant)typeof(Variant).GetMethod("From").MakeGenericMethod(property.GetValue(null).GetType()).Invoke(null, [property.GetValue(null)]);
-			}
-
-			File.WriteAllText($"{Constants.USER_FOLDER}/profiles/{profile}.json", Json.Stringify(data, "\t"));
-			Phoenyx.Skin.Save();
-			Logger.Log($"Saved settings {profile}");
-		}
-
-		public static void Load(string profile = null)
-		{
-			profile ??= Util.GetProfile();
-
-			Exception err = null;
-
-			try
-			{
-				Godot.FileAccess file = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/profiles/{profile}.json", Godot.FileAccess.ModeFlags.Read);
-				Dictionary data = (Dictionary)Json.ParseString(file.GetAsText());
-
-				file.Close();
-				
-				foreach (PropertyInfo property in typeof(Settings).GetProperties())
-				{
-					if (data.ContainsKey(property.Name))
-					{
-						property.SetValue(null, data[property.Name].GetType().GetMethod("As", BindingFlags.Public | BindingFlags.Instance).MakeGenericMethod(property.GetValue(null).GetType()).Invoke(data[property.Name], null));
-					}
-				}
-
-				if (Fullscreen)
-				{
-					DisplayServer.WindowSetMode(DisplayServer.WindowMode.ExclusiveFullscreen);
-				}
-
-				ToastNotification.Notify($"Loaded profile [{profile}]");
-			}
-			catch (Exception exception)
-			{
-				err = exception;
-			}
-
-			if (!Directory.Exists($"{Constants.USER_FOLDER}/skins/{Skin}"))
-			{
-				Skin = "default";
-				ToastNotification.Notify($"Could not find skin {Skin}", 1);
-			}
-
-			Phoenyx.Skin.Load();
-
-			if (err != null)
-			{
-				ToastNotification.Notify("Settings file corrupted", 2);
-				throw Logger.Error($"Settings file corrupted; {err}");
-			}
-
-			Logger.Log($"Loaded settings {profile}");
-		}
-	}
 
 	public struct Skin
 	{
@@ -145,14 +42,14 @@ public partial class Phoenyx : Node
 
 		public static void Save()
 		{
-			File.WriteAllText($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/colors.txt", RawColors);
-			File.WriteAllText($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/space.txt", Space);
-			Logger.Log($"Saved skin {Settings.Skin}");
+			File.WriteAllText($"{Constants.USER_FOLDER}/skins/{SettingsProfile.Skin}/colors.txt", RawColors);
+			File.WriteAllText($"{Constants.USER_FOLDER}/skins/{SettingsProfile.Skin}/space.txt", Space);
+			Logger.Log($"Saved skin {SettingsProfile.Skin}");
 		}
 
 		public static void Load()
 		{
-			RawColors = File.ReadAllText($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/colors.txt").TrimSuffix(",");
+			RawColors = File.ReadAllText($"{Constants.USER_FOLDER}/skins/{SettingsProfile.Skin}/colors.txt").TrimSuffix(",");
 
 			string[] split = RawColors.Split(",");
 			Color[] colors = new Color[split.Length];
@@ -173,36 +70,36 @@ public partial class Phoenyx : Node
 					continue;
 				}
 
-				property.SetValue(null, ImageTexture.CreateFromImage(Image.LoadFromFile($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/{property.Name.TrimSuffix("Image").ToSnakeCase()}.png")));
+				property.SetValue(null, ImageTexture.CreateFromImage(Image.LoadFromFile($"{Constants.USER_FOLDER}/skins/{SettingsProfile.Skin}/{property.Name.TrimSuffix("Image").ToSnakeCase()}.png")));
 			}
 
-			Space = File.ReadAllText($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/space.txt");
+			Space = File.ReadAllText($"{Constants.USER_FOLDER}/skins/{SettingsProfile.Skin}/space.txt");
 
-			if (File.Exists($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/note.obj"))
+			if (File.Exists($"{Constants.USER_FOLDER}/skins/{SettingsProfile.Skin}/note.obj"))
 			{
-				NoteMesh = (ArrayMesh)Util.OBJParser.Call("load_obj", $"{Constants.USER_FOLDER}/skins/{Settings.Skin}/note.obj");
+				NoteMesh = (ArrayMesh)Util.OBJParser.Call("load_obj", $"{Constants.USER_FOLDER}/skins/{SettingsProfile.Skin}/note.obj");
 			}
 			else
 			{
 				NoteMesh = GD.Load<ArrayMesh>($"res://skin/note.obj");
 			}
 
-			if (File.Exists($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/hit.mp3"))
+			if (File.Exists($"{Constants.USER_FOLDER}/skins/{SettingsProfile.Skin}/hit.mp3"))
 			{
-				Godot.FileAccess file = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/hit.mp3", Godot.FileAccess.ModeFlags.Read);
+				Godot.FileAccess file = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/skins/{SettingsProfile.Skin}/hit.mp3", Godot.FileAccess.ModeFlags.Read);
 				HitSoundBuffer = file.GetBuffer((long)file.GetLength());
 				file.Close();
 			}
 
-			if (File.Exists($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/fail.mp3"))
+			if (File.Exists($"{Constants.USER_FOLDER}/skins/{SettingsProfile.Skin}/fail.mp3"))
 			{
-				Godot.FileAccess file = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/fail.mp3", Godot.FileAccess.ModeFlags.Read);
+				Godot.FileAccess file = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/skins/{SettingsProfile.Skin}/fail.mp3", Godot.FileAccess.ModeFlags.Read);
 				FailSoundBuffer = file.GetBuffer((long)file.GetLength());
 				file.Close();
 			}
 			
-			ToastNotification.Notify($"Loaded skin [{Settings.Skin}]");
-			Logger.Log($"Loaded skin {Settings.Skin}");
+			ToastNotification.Notify($"Loaded skin [{SettingsProfile.Skin}]");
+			Logger.Log($"Loaded skin {SettingsProfile.Skin}");
 		}
 	}
 
@@ -431,16 +328,16 @@ public partial class Phoenyx : Node
 
 			if (!File.Exists($"{Constants.USER_FOLDER}/profiles/default.json"))
 			{
-				Settings.Save("default");
+				SettingsProfile.Save("default");
 			}
 			
 			try
 			{
-				Settings.Load();
+				SettingsProfile.Load();
 			}
 			catch
 			{
-				Settings.Save();
+				SettingsProfile.Save();
 			}
 
 			if (!File.Exists($"{Constants.USER_FOLDER}/stats"))
@@ -511,7 +408,7 @@ public partial class Phoenyx : Node
 
 			if (Loaded)
 			{
-				Settings.Save();
+				SettingsProfile.Save();
 				Stats.Save();
 			}
 
