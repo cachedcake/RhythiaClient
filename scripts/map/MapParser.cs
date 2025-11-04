@@ -40,19 +40,19 @@ public partial class MapParser : Node
 	{
 		double start = Time.GetTicksUsec();
 
-		if (File.Exists($"{Phoenyx.Constants.UserFolder}/maps/{map.ID}.phxm"))
+		if (File.Exists($"{Constants.USER_FOLDER}/maps/{map.ID}.phxm"))
 		{
-			File.Delete($"{Phoenyx.Constants.UserFolder}/maps/{map.ID}.phxm");
+			File.Delete($"{Constants.USER_FOLDER}/maps/{map.ID}.phxm");
 		}
 
-		if (!Directory.Exists($"{Phoenyx.Constants.UserFolder}/cache/phxmencode"))
+		if (!Directory.Exists($"{Constants.USER_FOLDER}/cache/phxmencode"))
 		{
-			Directory.CreateDirectory($"{Phoenyx.Constants.UserFolder}/cache/phxmencode");
+			Directory.CreateDirectory($"{Constants.USER_FOLDER}/cache/phxmencode");
 		}
 		
-		File.WriteAllText($"{Phoenyx.Constants.UserFolder}/cache/phxmencode/metadata.json", map.EncodeMeta());
+		File.WriteAllText($"{Constants.USER_FOLDER}/cache/phxmencode/metadata.json", map.EncodeMeta());
 
-		Godot.FileAccess objects = Godot.FileAccess.Open($"{Phoenyx.Constants.UserFolder}/cache/phxmencode/objects.phxmo", Godot.FileAccess.ModeFlags.Write);
+		Godot.FileAccess objects = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/cache/phxmencode/objects.phxmo", Godot.FileAccess.ModeFlags.Write);
 
 		/*
 			uint32; ms
@@ -99,33 +99,33 @@ public partial class MapParser : Node
 
 		if (map.AudioBuffer != null)
 		{
-			Godot.FileAccess audio = Godot.FileAccess.Open($"{Phoenyx.Constants.UserFolder}/cache/phxmencode/audio.{map.AudioExt}", Godot.FileAccess.ModeFlags.Write);
+			Godot.FileAccess audio = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/cache/phxmencode/audio.{map.AudioExt}", Godot.FileAccess.ModeFlags.Write);
 			audio.StoreBuffer(map.AudioBuffer);
 			audio.Close();
 		}
 
 		if (map.CoverBuffer != null)
 		{
-			Godot.FileAccess cover = Godot.FileAccess.Open($"{Phoenyx.Constants.UserFolder}/cache/phxmencode/cover.png", Godot.FileAccess.ModeFlags.Write);
+			Godot.FileAccess cover = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/cache/phxmencode/cover.png", Godot.FileAccess.ModeFlags.Write);
 			cover.StoreBuffer(map.CoverBuffer);
 			cover.Close();
 		}
 
 		if (map.VideoBuffer != null)
 		{
-			Godot.FileAccess video = Godot.FileAccess.Open($"{Phoenyx.Constants.UserFolder}/cache/phxmencode/video.mp4", Godot.FileAccess.ModeFlags.Write);
+			Godot.FileAccess video = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/cache/phxmencode/video.mp4", Godot.FileAccess.ModeFlags.Write);
 			video.StoreBuffer(map.VideoBuffer);
 			video.Close();
 		}
 
-		ZipFile.CreateFromDirectory($"{Phoenyx.Constants.UserFolder}/cache/phxmencode", $"{Phoenyx.Constants.UserFolder}/maps/{map.ID}.phxm", CompressionLevel.NoCompression, false);
+		ZipFile.CreateFromDirectory($"{Constants.USER_FOLDER}/cache/phxmencode", $"{Constants.USER_FOLDER}/maps/{map.ID}.phxm", CompressionLevel.NoCompression, false);
 
-		foreach (string filePath in Directory.GetFiles($"{Phoenyx.Constants.UserFolder}/cache/phxmencode"))
+		foreach (string filePath in Directory.GetFiles($"{Constants.USER_FOLDER}/cache/phxmencode"))
 		{
 			File.Delete(filePath);
 		}
 
-		Directory.Delete($"{Phoenyx.Constants.UserFolder}/cache/phxmencode");
+		Directory.Delete($"{Constants.USER_FOLDER}/cache/phxmencode");
 
 		if (logBenchmark)
 		{
@@ -166,7 +166,7 @@ public partial class MapParser : Node
 			Logger.Log($"DECODING {ext.ToUpper()}: {(Time.GetTicksUsec() - start) / 1000}ms");
 		}
 
-		if (save && !File.Exists($"{Phoenyx.Constants.UserFolder}/maps/{map.ID}.phxm"))
+		if (save && !File.Exists($"{Constants.USER_FOLDER}/maps/{map.ID}.phxm"))
 		{
 			Encode(map, logBenchmark);
 		}
@@ -381,14 +381,14 @@ public partial class MapParser : Node
 
 	public static Map PHXM(string path)
 	{
-		if (Directory.Exists($"{Phoenyx.Constants.UserFolder}/cache/phxmdecode"))
+		if (Directory.Exists($"{Constants.USER_FOLDER}/cache/phxmdecode"))
 		{
-			foreach (string filePath in Directory.GetFiles($"{Phoenyx.Constants.UserFolder}/cache/phxmdecode"))
+			foreach (string filePath in Directory.GetFiles($"{Constants.USER_FOLDER}/cache/phxmdecode"))
 			{
 				File.Delete(filePath);
 			}
 
-			Directory.Delete($"{Phoenyx.Constants.UserFolder}/cache/phxmdecode");
+			Directory.Delete($"{Constants.USER_FOLDER}/cache/phxmdecode");
 		}
 		
 		Map map;

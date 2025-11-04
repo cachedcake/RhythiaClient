@@ -112,7 +112,7 @@ public struct Replay
 
             MapID = FileBuffer.GetString((int)FileBuffer.GetUInt32());
             MapNoteCount = FileBuffer.GetUInt64();
-            MapFilePath = $"{Phoenyx.Constants.UserFolder}/maps/{MapID}.phxm";
+            MapFilePath = $"{Constants.USER_FOLDER}/maps/{MapID}.phxm";
 
             if (!File.Exists(MapFilePath))
             {

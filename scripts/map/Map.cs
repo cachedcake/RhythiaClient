@@ -34,7 +34,7 @@ public struct Map
 		Mappers = mappers ?? ["N/A"];
 		PrettyMappers = "";
 		Difficulty = difficulty;
-		DifficultyName = difficultyName ?? Phoenyx.Constants.Difficulties[Difficulty];
+		DifficultyName = difficultyName ?? Constants.DIFFICULTIES[Difficulty];
 		AudioBuffer = audioBuffer;
 		CoverBuffer = coverBuffer;
 		VideoBuffer = videoBuffer;

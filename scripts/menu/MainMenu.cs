@@ -325,7 +325,7 @@ public partial class MainMenu : Control
 							}
 						}
 
-						value = mostPlayedID != null ? MapParser.Decode($"{Phoenyx.Constants.UserFolder}/maps/{mostPlayedID}.phxm").PrettyTitle : "None";
+						value = mostPlayedID != null ? MapParser.Decode($"{Constants.USER_FOLDER}/maps/{mostPlayedID}.phxm").PrettyTitle : "None";
 						break;
 				}
 
@@ -445,7 +445,7 @@ public partial class MainMenu : Control
 		
 		ImportButton.Pressed += ImportDialog.Show;
 		UserFolderButton.Pressed += () => {
-			OS.ShellOpen($"{Phoenyx.Constants.UserFolder}");
+			OS.ShellOpen($"{Constants.USER_FOLDER}");
 		};
 		SettingsButton.Pressed += () => {
 			SettingsManager.ShowSettings();
@@ -497,7 +497,7 @@ public partial class MainMenu : Control
 		ContextMenu.GetNode("Container").GetNode<Button>("Favorite").Pressed += () => {
 			ContextMenu.Visible = false;
 
-			string favorites = File.ReadAllText($"{Phoenyx.Constants.UserFolder}/favorites.txt");
+			string favorites = File.ReadAllText($"{Constants.USER_FOLDER}/favorites.txt");
 			bool favorited = favorites.Split("\n").ToList().Contains(ContextMenuTarget);
 			Panel mapButton = MapListContainer.GetNode<Panel>(ContextMenuTarget);
 			TextureRect favorite = mapButton.GetNode("Holder").GetNode<TextureRect>("Favorited");
@@ -505,13 +505,13 @@ public partial class MainMenu : Control
 
 			if (favorited)
 			{
-				File.WriteAllText($"{Phoenyx.Constants.UserFolder}/favorites.txt", favorites.Replace($"{ContextMenuTarget}\n", ""));
+				File.WriteAllText($"{Constants.USER_FOLDER}/favorites.txt", favorites.Replace($"{ContextMenuTarget}\n", ""));
 				FavoritedMaps[mapButton] = false;
 			}
 			else
 			{
 				favorite.Texture = Phoenyx.Skin.FavoriteImage;
-				File.WriteAllText($"{Phoenyx.Constants.UserFolder}/favorites.txt", $"{favorites}{ContextMenuTarget}\n");
+				File.WriteAllText($"{Constants.USER_FOLDER}/favorites.txt", $"{favorites}{ContextMenuTarget}\n");
 				FavoritedMaps[mapButton] = true;
 			}
 			
@@ -534,16 +534,16 @@ public partial class MainMenu : Control
 				VisibleMaps--;
 			}
 
-			File.Delete($"{Phoenyx.Constants.UserFolder}/maps/{ContextMenuTarget}.phxm");
+			File.Delete($"{Constants.USER_FOLDER}/maps/{ContextMenuTarget}.phxm");
 			
-			if (Directory.Exists($"{Phoenyx.Constants.UserFolder}/cache/maps/{ContextMenuTarget}"))
+			if (Directory.Exists($"{Constants.USER_FOLDER}/cache/maps/{ContextMenuTarget}"))
 			{
-				foreach (string file in Directory.GetFiles($"{Phoenyx.Constants.UserFolder}/cache/maps/{ContextMenuTarget}"))
+				foreach (string file in Directory.GetFiles($"{Constants.USER_FOLDER}/cache/maps/{ContextMenuTarget}"))
 				{
 					File.Delete(file);
 				}
 
-				Directory.Delete($"{Phoenyx.Constants.UserFolder}/cache/maps/{ContextMenuTarget}");
+				Directory.Delete($"{Constants.USER_FOLDER}/cache/maps/{ContextMenuTarget}");
 			}
 
 			ToastNotification.Notify("Successfuly deleted map");
@@ -554,22 +554,22 @@ public partial class MainMenu : Control
 		};
 		ContextMenu.GetNode("Container").GetNode<Button>("VideoRemove").Pressed += () => {
 			ContextMenu.Visible = false;
-			Map map = MapParser.Decode($"{Phoenyx.Constants.UserFolder}/maps/{ContextMenuTarget}.phxm");
+			Map map = MapParser.Decode($"{Constants.USER_FOLDER}/maps/{ContextMenuTarget}.phxm");
 
-			File.Delete($"{Phoenyx.Constants.UserFolder}/maps/{ContextMenuTarget}.phxm");
+			File.Delete($"{Constants.USER_FOLDER}/maps/{ContextMenuTarget}.phxm");
 
 			map.VideoBuffer = null;
 
 			MapParser.Encode(map);
 
-			if (Directory.Exists($"{Phoenyx.Constants.UserFolder}/cache/maps/{ContextMenuTarget}"))
+			if (Directory.Exists($"{Constants.USER_FOLDER}/cache/maps/{ContextMenuTarget}"))
 			{
-				foreach (string filePath in Directory.GetFiles($"{Phoenyx.Constants.UserFolder}/cache/maps/{ContextMenuTarget}"))
+				foreach (string filePath in Directory.GetFiles($"{Constants.USER_FOLDER}/cache/maps/{ContextMenuTarget}"))
 				{
 					File.Delete(filePath);
 				}
 
-				Directory.Delete($"{Phoenyx.Constants.UserFolder}/cache/maps/{ContextMenuTarget}");
+				Directory.Delete($"{Constants.USER_FOLDER}/cache/maps/{ContextMenuTarget}");
 			}
 
 			ToastNotification.Notify("Successfully removed video from map");
@@ -584,22 +584,22 @@ public partial class MainMenu : Control
 			Godot.FileAccess file = Godot.FileAccess.Open(path, Godot.FileAccess.ModeFlags.Read);
 			byte[] videoBuffer = file.GetBuffer((long)file.GetLength());
 			file.Close();
-			Map map = MapParser.Decode($"{Phoenyx.Constants.UserFolder}/maps/{ContextMenuTarget}.phxm");
+			Map map = MapParser.Decode($"{Constants.USER_FOLDER}/maps/{ContextMenuTarget}.phxm");
 
-			File.Delete($"{Phoenyx.Constants.UserFolder}/maps/{ContextMenuTarget}.phxm");
+			File.Delete($"{Constants.USER_FOLDER}/maps/{ContextMenuTarget}.phxm");
 
 			map.VideoBuffer = videoBuffer;
 
 			MapParser.Encode(map);
 
-			if (Directory.Exists($"{Phoenyx.Constants.UserFolder}/cache/maps/{ContextMenuTarget}"))
+			if (Directory.Exists($"{Constants.USER_FOLDER}/cache/maps/{ContextMenuTarget}"))
 			{
-				foreach (string filePath in Directory.GetFiles($"{Phoenyx.Constants.UserFolder}/cache/maps/{ContextMenuTarget}"))
+				foreach (string filePath in Directory.GetFiles($"{Constants.USER_FOLDER}/cache/maps/{ContextMenuTarget}"))
 				{
 					File.Delete(filePath);
 				}
 
-				Directory.Delete($"{Phoenyx.Constants.UserFolder}/cache/maps/{ContextMenuTarget}");
+				Directory.Delete($"{Constants.USER_FOLDER}/cache/maps/{ContextMenuTarget}");
 			}
 
 			ToastNotification.Notify("Successfully added video to map");
@@ -847,7 +847,7 @@ public partial class MainMenu : Control
 				case Key.Space:
 					if (SelectedMapID != null && !SearchEdit.HasFocus() && !SearchAuthorEdit.HasFocus())
 					{
-						Map map = MapParser.Decode($"{Phoenyx.Constants.UserFolder}/maps/{SelectedMapID}.phxm");
+						Map map = MapParser.Decode($"{Constants.USER_FOLDER}/maps/{SelectedMapID}.phxm");
 
 						SoundManager.Song.Stop();
 						SceneManager.Load("res://scenes/game.tscn");
@@ -1023,7 +1023,7 @@ public partial class MainMenu : Control
 
 		foreach (Panel map in MapListContainer.GetChildren())
 		{
-			map.Visible = !Phoenyx.Constants.TempMapMode && map.GetNode("Holder").GetNode<Label>("Title").Text.ToLower().Contains(SearchTitle) && map.GetNode("Holder").GetNode<RichTextLabel>("Extra").Text.ToLower().Split(" - ")[^1].Contains(SearchAuthor);
+			map.Visible = !Constants.TEMP_MAP_MODE && map.GetNode("Holder").GetNode<Label>("Title").Text.ToLower().Contains(SearchTitle) && map.GetNode("Holder").GetNode<RichTextLabel>("Extra").Text.ToLower().Split(" - ")[^1].Contains(SearchAuthor);
 
 			if (map.Visible)
 			{
@@ -1063,7 +1063,7 @@ public partial class MainMenu : Control
 
 				if (MapListContainer.GetNode(SelectedMapID) == mapButton && !fromImport)
 				{
-					Map map = MapParser.Decode($"{Phoenyx.Constants.UserFolder}/maps/{fileName}.phxm");
+					Map map = MapParser.Decode($"{Constants.USER_FOLDER}/maps/{fileName}.phxm");
 
 					SoundManager.Song.Stop();
 					SceneManager.Load("res://scenes/game.tscn");
@@ -1111,7 +1111,7 @@ public partial class MainMenu : Control
 		}
 
 		SelectedMapID = fileName;
-		SelectedMap = MapParser.Decode($"{Phoenyx.Constants.UserFolder}/maps/{SelectedMapID}.phxm");
+		SelectedMap = MapParser.Decode($"{Constants.USER_FOLDER}/maps/{SelectedMapID}.phxm");
 
 		if (firstTimeSelected)
 		{
@@ -1124,7 +1124,7 @@ public partial class MainMenu : Control
 	public static void SortMapList()
 	{
 		List<Node> favorites = [];
-		string[] maps = Directory.GetFiles($"{Phoenyx.Constants.UserFolder}/maps");
+		string[] maps = Directory.GetFiles($"{Constants.USER_FOLDER}/maps");
 
 		for (int i = 0; i < maps.Length; i++)
 		{
@@ -1244,9 +1244,9 @@ public partial class MainMenu : Control
 		double start = Time.GetTicksUsec();
 		int i = 0;
 		Color black = Color.Color8(0, 0, 0, 1);
-		List<string> favorites = [.. File.ReadAllText($"{Phoenyx.Constants.UserFolder}/favorites.txt").Split("\n")];
+		List<string> favorites = [.. File.ReadAllText($"{Constants.USER_FOLDER}/favorites.txt").Split("\n")];
 
-		foreach (string mapFile in Directory.GetFiles($"{Phoenyx.Constants.UserFolder}/maps"))
+		foreach (string mapFile in Directory.GetFiles($"{Constants.USER_FOLDER}/maps"))
 		{
 			try
 			{
@@ -1264,12 +1264,12 @@ public partial class MainMenu : Control
 				int difficulty;
 				string coverFile = null;
 
-				if (!Directory.Exists($"{Phoenyx.Constants.UserFolder}/cache/maps/{fileName}"))
+				if (!Directory.Exists($"{Constants.USER_FOLDER}/cache/maps/{fileName}"))
 				{
-					Directory.CreateDirectory($"{Phoenyx.Constants.UserFolder}/cache/maps/{fileName}");
+					Directory.CreateDirectory($"{Constants.USER_FOLDER}/cache/maps/{fileName}");
 					Map map = MapParser.Decode(mapFile, null, false);
 
-					File.WriteAllText($"{Phoenyx.Constants.UserFolder}/cache/maps/{fileName}/metadata.json", map.EncodeMeta());
+					File.WriteAllText($"{Constants.USER_FOLDER}/cache/maps/{fileName}/metadata.json", map.EncodeMeta());
 
 					//if (map.CoverBuffer != null)
 					//{
@@ -1290,7 +1290,7 @@ public partial class MainMenu : Control
 				}
 				else
 				{
-					Godot.FileAccess metaFile = Godot.FileAccess.Open($"{Phoenyx.Constants.UserFolder}/cache/maps/{fileName}/metadata.json", Godot.FileAccess.ModeFlags.Read);
+					Godot.FileAccess metaFile = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/cache/maps/{fileName}/metadata.json", Godot.FileAccess.ModeFlags.Read);
 					Godot.Collections.Dictionary metadata = (Godot.Collections.Dictionary)Json.ParseString(Encoding.UTF8.GetString(metaFile.GetBuffer((long)metaFile.GetLength())));
 					metaFile.Close();
 
@@ -1324,7 +1324,7 @@ public partial class MainMenu : Control
 				}
 
 				holder.GetNode<Label>("Title").Text = title;
-				holder.GetNode<RichTextLabel>("Extra").Text = $"[color={Phoenyx.Constants.SecondaryDifficultyColours[difficulty].ToHtml(false)}]{difficultyName}[color=808080] - {mappers}".ReplaceLineEndings("");
+				holder.GetNode<RichTextLabel>("Extra").Text = $"[color={Constants.SECONDARY_DIFFICULTY_COLORS[difficulty].ToHtml(false)}]{difficultyName}[color=808080] - {mappers}".ReplaceLineEndings("");
 
 				MapListContainer.AddChild(mapButton);
 				mapButton.Name = fileName;
@@ -1389,9 +1389,9 @@ public partial class MainMenu : Control
 
 		Leaderboard leaderboard = new();
 		
-		if (File.Exists($"{Phoenyx.Constants.UserFolder}/pbs/{SelectedMapID}"))
+		if (File.Exists($"{Constants.USER_FOLDER}/pbs/{SelectedMapID}"))
 		{
-			leaderboard = new(SelectedMapID, $"{Phoenyx.Constants.UserFolder}/pbs/{SelectedMapID}");
+			leaderboard = new(SelectedMapID, $"{Constants.USER_FOLDER}/pbs/{SelectedMapID}");
 		}
 		
 		LeaderboardPanel.GetNode<Label>("NoScores").Visible = leaderboard.ScoreCount == 0;
@@ -1429,9 +1429,9 @@ public partial class MainMenu : Control
 			}
 
 			scorePanel.GetNode<Button>("Button").Pressed += () => {
-				if (File.Exists($"{Phoenyx.Constants.UserFolder}/replays/{score.AttemptID}.phxr"))
+				if (File.Exists($"{Constants.USER_FOLDER}/replays/{score.AttemptID}.phxr"))
 				{
-					Replay replay = new($"{Phoenyx.Constants.UserFolder}/replays/{score.AttemptID}.phxr");
+					Replay replay = new($"{Constants.USER_FOLDER}/replays/{score.AttemptID}.phxr");
 					SoundManager.Song.Stop();
 					SceneManager.Load("res://scenes/game.tscn");
 					Runner.Play(MapParser.Decode(replay.MapFilePath), replay.Speed, replay.StartFrom, replay.Modifiers, null, [replay]);

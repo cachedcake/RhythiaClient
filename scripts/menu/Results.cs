@@ -53,11 +53,11 @@ public partial class Results : Control
 
 		if (Runner.CurrentAttempt.Map.CoverBuffer != null)
 		{
-			Godot.FileAccess file = Godot.FileAccess.Open($"{Phoenyx.Constants.UserFolder}/cache/cover.png", Godot.FileAccess.ModeFlags.Write);
+			Godot.FileAccess file = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/cache/cover.png", Godot.FileAccess.ModeFlags.Write);
 			file.StoreBuffer(Runner.CurrentAttempt.Map.CoverBuffer);
 			file.Close();
 
-			Cover.Texture = ImageTexture.CreateFromImage(Image.LoadFromFile($"{Phoenyx.Constants.UserFolder}/cache/cover.png"));
+			Cover.Texture = ImageTexture.CreateFromImage(Image.LoadFromFile($"{Constants.USER_FOLDER}/cache/cover.png"));
 			GetNode<TextureRect>("CoverBackground").Texture = Cover.Texture;
 		}
 
@@ -86,7 +86,7 @@ public partial class Results : Control
 
 			if (Runner.CurrentAttempt.IsReplay)
 			{
-				path = $"{Phoenyx.Constants.UserFolder}/replays/{Runner.CurrentAttempt.Replays[0].ID}.phxr";
+				path = $"{Constants.USER_FOLDER}/replays/{Runner.CurrentAttempt.Replays[0].ID}.phxr";
 			}
 			else
 			{

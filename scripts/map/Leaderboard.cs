@@ -20,7 +20,7 @@ public struct Leaderboard
 
         if (Path == null)
         {
-            Path = $"{Phoenyx.Constants.UserFolder}/pbs/{MapID}";
+            Path = $"{Constants.USER_FOLDER}/pbs/{MapID}";
         }
 
         byte[] bytes = [];

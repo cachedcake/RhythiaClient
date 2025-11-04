@@ -94,7 +94,7 @@ public partial class SoundManager : Node
 
 	public static void UpdateJukeboxQueue()
 	{
-		JukeboxQueue = Directory.GetFiles($"{Phoenyx.Constants.UserFolder}/maps");
+		JukeboxQueue = Directory.GetFiles($"{Constants.USER_FOLDER}/maps");
 
 		for (int i = 0; i < JukeboxQueue.Length; i++)
 		{

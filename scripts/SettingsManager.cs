@@ -59,13 +59,13 @@ public partial class SettingsManager : Control
 			profileEdit.ReleaseFocus();
 			profileEdit.Visible = false;
 
-			if (File.Exists($"{Phoenyx.Constants.UserFolder}/profiles/{text}.json"))
+			if (File.Exists($"{Constants.USER_FOLDER}/profiles/{text}.json"))
 			{
 				ToastNotification.Notify($"Profile {text} already exists!");
 				return;
 			}
 
-			File.WriteAllText($"{Phoenyx.Constants.UserFolder}/profiles/{text}.json", File.ReadAllText($"{Phoenyx.Constants.UserFolder}/profiles/default.json"));
+			File.WriteAllText($"{Constants.USER_FOLDER}/profiles/{text}.json", File.ReadAllText($"{Constants.USER_FOLDER}/profiles/default.json"));
 			UpdateSettings();
 		};
 		profiles.Pressed += ShowMouse;
@@ -74,7 +74,7 @@ public partial class SettingsManager : Control
 
 			HideMouse();
 			Phoenyx.Settings.Save();
-			File.WriteAllText($"{Phoenyx.Constants.UserFolder}/current_profile.txt", profile);
+			File.WriteAllText($"{Constants.USER_FOLDER}/current_profile.txt", profile);
 			Phoenyx.Settings.Load(profile);
 			UpdateSettings();
 		};
@@ -100,7 +100,7 @@ public partial class SettingsManager : Control
 		};
 
 		Holder.GetNode("Categories").GetNode("Visuals").GetNode("Container").GetNode("Skin").GetNode<Button>("SkinFolder").Pressed += () => {
-			OS.ShellOpen($"{Phoenyx.Constants.UserFolder}/skins/{Phoenyx.Settings.Skin}");
+			OS.ShellOpen($"{Constants.USER_FOLDER}/skins/{Phoenyx.Settings.Skin}");
 		};
 		Holder.GetNode("Categories").GetNode("Other").GetNode("Container").GetNode("RhythiaImport").GetNode<Button>("Button").Pressed += () => {
 			if (!Directory.Exists($"{OS.GetDataDir()}/SoundSpacePlus") || !File.Exists($"{OS.GetDataDir()}/SoundSpacePlus/settings.json"))
@@ -276,7 +276,7 @@ public partial class SettingsManager : Control
 		OptionButton spaces = Holder.GetNode("Categories").GetNode("Visuals").GetNode("Container").GetNode("Space").GetNode<OptionButton>("OptionsButton");
 		OptionButton skins = Holder.GetNode("Categories").GetNode("Visuals").GetNode("Container").GetNode("Skin").GetNode<OptionButton>("OptionsButton");
 		OptionButton profiles = Holder.GetNode("Header").GetNode<OptionButton>("Profiles");
-		string currentProfile = File.ReadAllText($"{Phoenyx.Constants.UserFolder}/current_profile.txt");
+		string currentProfile = File.ReadAllText($"{Constants.USER_FOLDER}/current_profile.txt");
 
 		skins.Clear();
 		profiles.Clear();
@@ -292,7 +292,7 @@ public partial class SettingsManager : Control
 
 		int j = 0;
 
-		foreach (string path in Directory.GetDirectories($"{Phoenyx.Constants.UserFolder}/skins"))
+		foreach (string path in Directory.GetDirectories($"{Constants.USER_FOLDER}/skins"))
 		{
 			string name = path.Split("\\")[^1];
 			
@@ -308,7 +308,7 @@ public partial class SettingsManager : Control
 
 		j = 0;
 
-		foreach (string path in Directory.GetFiles($"{Phoenyx.Constants.UserFolder}/profiles"))
+		foreach (string path in Directory.GetFiles($"{Constants.USER_FOLDER}/profiles"))
 		{
 			string name = path.Split("\\")[^1].TrimSuffix(".json");
 			

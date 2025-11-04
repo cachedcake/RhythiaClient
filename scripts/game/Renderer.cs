@@ -33,7 +33,7 @@ public partial class Renderer : MultiMeshInstance3D
             }
             else if (fadeOut)
             {
-                alpha -= (ad - depth) / (ad + (float)Phoenyx.Constants.HitWindow * ar / 1000);
+                alpha -= (ad - depth) / (ad + (float)Constants.HIT_WINDOW * ar / 1000);
             }
 
             if (!pushback && note.Millisecond - Runner.CurrentAttempt.Progress <= 0)

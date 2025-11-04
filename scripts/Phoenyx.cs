@@ -9,31 +9,6 @@ using System.Reflection;
 
 public partial class Phoenyx : Node
 {
-	public struct Constants
-	{
-		public static readonly ulong Started = Time.GetTicksUsec();
-		public static readonly string RootFolder = Directory.GetCurrentDirectory();
-		public static readonly string UserFolder = OS.GetUserDataDir();
-		public static readonly bool TempMapMode = false;//OS.GetCmdlineArgs().Length > 0;
-		public static readonly double CursorSize = 0.2625;
-		public static readonly double GridSize = 3.0;
-		public static readonly Vector2 Bounds = new((float)(GridSize / 2 - CursorSize / 2), (float)(GridSize / 2 - CursorSize / 2));
-		public static readonly double HitBoxSize = 0.07;
-		public static readonly double HitWindow = 55;
-		public static readonly int BreakTime = 4000;  // used for skipping breaks mid-map
-		public static readonly string[] Difficulties = ["N/A", "Easy", "Medium", "Hard", "Expert", "Insane"];
-		public static readonly Color[] DifficultyColours = [Color.FromHtml("ffffff"), Color.FromHtml("00ff00"), Color.FromHtml("ffff00"), Color.FromHtml("ff0000"), Color.FromHtml("7f00ff"), Color.FromHtml("007fff")];
-		public static readonly Color[] SecondaryDifficultyColours = [Color.FromHtml("808080"), Color.FromHtml("7fff7f"), Color.FromHtml("ffff7f"), Color.FromHtml("ff007f"), Color.FromHtml("ff00ff"), Color.FromHtml("007fff")];
-		public static readonly Godot.Collections.Dictionary<string, double> ModsMultiplierIncrement = new(){
-			["NoFail"] = 0,
-			["Ghost"] = 0.0675,
-			["Spin"] = 0.18,
-			["Flashlight"] = 0.1,
-			["Chaos"] = 0.07,
-			["HardRock"] = 0.08
-		};
-	}
-
 	public struct Settings
 	{
 		public static bool Fullscreen {get; set;} = false;
@@ -82,7 +57,7 @@ public partial class Phoenyx : Node
 				data[property.Name] = (Variant)typeof(Variant).GetMethod("From").MakeGenericMethod(property.GetValue(null).GetType()).Invoke(null, [property.GetValue(null)]);
 			}
 
-			File.WriteAllText($"{Constants.UserFolder}/profiles/{profile}.json", Json.Stringify(data, "\t"));
+			File.WriteAllText($"{Constants.USER_FOLDER}/profiles/{profile}.json", Json.Stringify(data, "\t"));
 			Phoenyx.Skin.Save();
 			Logger.Log($"Saved settings {profile}");
 		}
@@ -95,7 +70,7 @@ public partial class Phoenyx : Node
 
 			try
 			{
-				Godot.FileAccess file = Godot.FileAccess.Open($"{Constants.UserFolder}/profiles/{profile}.json", Godot.FileAccess.ModeFlags.Read);
+				Godot.FileAccess file = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/profiles/{profile}.json", Godot.FileAccess.ModeFlags.Read);
 				Dictionary data = (Dictionary)Json.ParseString(file.GetAsText());
 
 				file.Close();
@@ -120,7 +95,7 @@ public partial class Phoenyx : Node
 				err = exception;
 			}
 
-			if (!Directory.Exists($"{Constants.UserFolder}/skins/{Skin}"))
+			if (!Directory.Exists($"{Constants.USER_FOLDER}/skins/{Skin}"))
 			{
 				Skin = "default";
 				ToastNotification.Notify($"Could not find skin {Skin}", 1);
@@ -170,14 +145,14 @@ public partial class Phoenyx : Node
 
 		public static void Save()
 		{
-			File.WriteAllText($"{Constants.UserFolder}/skins/{Settings.Skin}/colors.txt", RawColors);
-			File.WriteAllText($"{Constants.UserFolder}/skins/{Settings.Skin}/space.txt", Space);
+			File.WriteAllText($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/colors.txt", RawColors);
+			File.WriteAllText($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/space.txt", Space);
 			Logger.Log($"Saved skin {Settings.Skin}");
 		}
 
 		public static void Load()
 		{
-			RawColors = File.ReadAllText($"{Constants.UserFolder}/skins/{Settings.Skin}/colors.txt").TrimSuffix(",");
+			RawColors = File.ReadAllText($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/colors.txt").TrimSuffix(",");
 
 			string[] split = RawColors.Split(",");
 			Color[] colors = new Color[split.Length];
@@ -198,30 +173,30 @@ public partial class Phoenyx : Node
 					continue;
 				}
 
-				property.SetValue(null, ImageTexture.CreateFromImage(Image.LoadFromFile($"{Constants.UserFolder}/skins/{Settings.Skin}/{property.Name.TrimSuffix("Image").ToSnakeCase()}.png")));
+				property.SetValue(null, ImageTexture.CreateFromImage(Image.LoadFromFile($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/{property.Name.TrimSuffix("Image").ToSnakeCase()}.png")));
 			}
 
-			Space = File.ReadAllText($"{Constants.UserFolder}/skins/{Settings.Skin}/space.txt");
+			Space = File.ReadAllText($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/space.txt");
 
-			if (File.Exists($"{Constants.UserFolder}/skins/{Settings.Skin}/note.obj"))
+			if (File.Exists($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/note.obj"))
 			{
-				NoteMesh = (ArrayMesh)Util.OBJParser.Call("load_obj", $"{Constants.UserFolder}/skins/{Settings.Skin}/note.obj");
+				NoteMesh = (ArrayMesh)Util.OBJParser.Call("load_obj", $"{Constants.USER_FOLDER}/skins/{Settings.Skin}/note.obj");
 			}
 			else
 			{
 				NoteMesh = GD.Load<ArrayMesh>($"res://skin/note.obj");
 			}
 
-			if (File.Exists($"{Constants.UserFolder}/skins/{Settings.Skin}/hit.mp3"))
+			if (File.Exists($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/hit.mp3"))
 			{
-				Godot.FileAccess file = Godot.FileAccess.Open($"{Constants.UserFolder}/skins/{Settings.Skin}/hit.mp3", Godot.FileAccess.ModeFlags.Read);
+				Godot.FileAccess file = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/hit.mp3", Godot.FileAccess.ModeFlags.Read);
 				HitSoundBuffer = file.GetBuffer((long)file.GetLength());
 				file.Close();
 			}
 
-			if (File.Exists($"{Constants.UserFolder}/skins/{Settings.Skin}/fail.mp3"))
+			if (File.Exists($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/fail.mp3"))
 			{
-				Godot.FileAccess file = Godot.FileAccess.Open($"{Constants.UserFolder}/skins/{Settings.Skin}/fail.mp3", Godot.FileAccess.ModeFlags.Read);
+				Godot.FileAccess file = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/skins/{Settings.Skin}/fail.mp3", Godot.FileAccess.ModeFlags.Read);
 				FailSoundBuffer = file.GetBuffer((long)file.GetLength());
 				file.Close();
 			}
@@ -251,8 +226,8 @@ public partial class Phoenyx : Node
 
 		public static void Save()
 		{
-			File.SetAttributes($"{Constants.UserFolder}/stats", FileAttributes.None);
-			Godot.FileAccess file = Godot.FileAccess.Open($"{Constants.UserFolder}/stats", Godot.FileAccess.ModeFlags.Write);
+			File.SetAttributes($"{Constants.USER_FOLDER}/stats", FileAttributes.None);
+			Godot.FileAccess file = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/stats", Godot.FileAccess.ModeFlags.Write);
 			string accuraciesJson = Json.Stringify(PassAccuracies);
 			string mapsJson = Json.Stringify(FavouriteMaps);
 			
@@ -276,17 +251,17 @@ public partial class Phoenyx : Node
 			file.StoreString(mapsJson);
 			file.Close();
 
-			byte[] bytes = File.ReadAllBytes($"{Constants.UserFolder}/stats");
+			byte[] bytes = File.ReadAllBytes($"{Constants.USER_FOLDER}/stats");
 			byte[] hash = new byte[32];
 			
 			SHA256.HashData(bytes, hash);
 
-			file = Godot.FileAccess.Open($"{Constants.UserFolder}/stats", Godot.FileAccess.ModeFlags.Write);
+			file = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/stats", Godot.FileAccess.ModeFlags.Write);
 			file.StoreBuffer(bytes);
 			file.StoreBuffer(hash);
 			file.Close();
 
-			File.SetAttributes($"{Constants.UserFolder}/stats", FileAttributes.Hidden);
+			File.SetAttributes($"{Constants.USER_FOLDER}/stats", FileAttributes.Hidden);
 			Logger.Log("Saved stats");
 		}
 
@@ -294,7 +269,7 @@ public partial class Phoenyx : Node
 		{
 			try
 			{
-				FileParser file = new($"{Constants.UserFolder}/stats");
+				FileParser file = new($"{Constants.USER_FOLDER}/stats");
 
 				byte[] bytes = file.Get((int)file.Length - 32);
 
@@ -373,22 +348,22 @@ public partial class Phoenyx : Node
 			DiscordRPC.Call("Set", "app_id", 1272588732834254878);
 			DiscordRPC.Call("Set", "large_image", "short");
 			
-			if (!File.Exists($"{Constants.UserFolder}/favorites.txt"))
+			if (!File.Exists($"{Constants.USER_FOLDER}/favorites.txt"))
 			{
-				File.WriteAllText($"{Constants.UserFolder}/favorites.txt", "");
+				File.WriteAllText($"{Constants.USER_FOLDER}/favorites.txt", "");
 			}
 
-			if (!Directory.Exists($"{Constants.UserFolder}/cache"))
+			if (!Directory.Exists($"{Constants.USER_FOLDER}/cache"))
 			{
-				Directory.CreateDirectory($"{Constants.UserFolder}/cache");
+				Directory.CreateDirectory($"{Constants.USER_FOLDER}/cache");
 			}
 
-			if (!Directory.Exists($"{Constants.UserFolder}/cache/maps"))
+			if (!Directory.Exists($"{Constants.USER_FOLDER}/cache/maps"))
 			{
-				Directory.CreateDirectory($"{Constants.UserFolder}/cache/maps");
+				Directory.CreateDirectory($"{Constants.USER_FOLDER}/cache/maps");
 			}
 
-			foreach (string cacheFile in Directory.GetFiles($"{Constants.UserFolder}/cache"))
+			foreach (string cacheFile in Directory.GetFiles($"{Constants.USER_FOLDER}/cache"))
 			{
 				File.Delete(cacheFile);
 			}
@@ -397,15 +372,15 @@ public partial class Phoenyx : Node
 			{
 				string Folder = UserDirectories[i];
 
-				if (!Directory.Exists($"{Constants.UserFolder}/{Folder}"))
+				if (!Directory.Exists($"{Constants.USER_FOLDER}/{Folder}"))
 				{
-					Directory.CreateDirectory($"{Constants.UserFolder}/{Folder}");
+					Directory.CreateDirectory($"{Constants.USER_FOLDER}/{Folder}");
 				}
 			}
 
-			if (!Directory.Exists($"{Constants.UserFolder}/skins/default"))
+			if (!Directory.Exists($"{Constants.USER_FOLDER}/skins/default"))
 			{
-				Directory.CreateDirectory($"{Constants.UserFolder}/skins/default");
+				Directory.CreateDirectory($"{Constants.USER_FOLDER}/skins/default");
 			}
 			
 			foreach (string skinFile in SkinFiles)
@@ -439,7 +414,7 @@ public partial class Phoenyx : Node
 						continue;
 					}
 
-					Godot.FileAccess target = Godot.FileAccess.Open($"{Constants.UserFolder}/skins/default/{skinFile}", Godot.FileAccess.ModeFlags.Write);
+					Godot.FileAccess target = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/skins/default/{skinFile}", Godot.FileAccess.ModeFlags.Write);
 					target.StoreBuffer(buffer);
 					target.Close();
 				}
@@ -449,12 +424,12 @@ public partial class Phoenyx : Node
 				}
 			}
 
-			if (!File.Exists($"{Constants.UserFolder}/current_profile.txt"))
+			if (!File.Exists($"{Constants.USER_FOLDER}/current_profile.txt"))
 			{
-				File.WriteAllText($"{Constants.UserFolder}/current_profile.txt", "default");
+				File.WriteAllText($"{Constants.USER_FOLDER}/current_profile.txt", "default");
 			}
 
-			if (!File.Exists($"{Constants.UserFolder}/profiles/default.json"))
+			if (!File.Exists($"{Constants.USER_FOLDER}/profiles/default.json"))
 			{
 				Settings.Save("default");
 			}
@@ -468,10 +443,10 @@ public partial class Phoenyx : Node
 				Settings.Save();
 			}
 
-			if (!File.Exists($"{Constants.UserFolder}/stats"))
+			if (!File.Exists($"{Constants.USER_FOLDER}/stats"))
 			{
 				Logger.Log("Stats file not found");
-				File.WriteAllText($"{Constants.UserFolder}/stats", "");
+				File.WriteAllText($"{Constants.USER_FOLDER}/stats", "");
 				Stats.Save();
 			}
 			
@@ -505,7 +480,7 @@ public partial class Phoenyx : Node
 
 			List<string> import = [];
 
-			foreach (string file in Directory.GetFiles($"{Constants.UserFolder}/maps"))
+			foreach (string file in Directory.GetFiles($"{Constants.USER_FOLDER}/maps"))
 			{
 				if (file.GetExtension() == "sspm" || file.GetExtension() == "txt")
 				{
@@ -532,7 +507,7 @@ public partial class Phoenyx : Node
 				Runner.CurrentAttempt.Stop();
 			}
 
-			Stats.TotalPlaytime += (Time.GetTicksUsec() - Constants.Started) / 1000000;
+			Stats.TotalPlaytime += (Time.GetTicksUsec() - Constants.STARTED) / 1000000;
 
 			if (Loaded)
 			{
@@ -540,9 +515,9 @@ public partial class Phoenyx : Node
 				Stats.Save();
 			}
 
-			if (File.Exists($"{Constants.UserFolder}/maps/NA_tempmap.phxm"))
+			if (File.Exists($"{Constants.USER_FOLDER}/maps/NA_tempmap.phxm"))
 			{
-				File.Delete($"{Constants.UserFolder}/maps/NA_tempmap.phxm");
+				File.Delete($"{Constants.USER_FOLDER}/maps/NA_tempmap.phxm");
 			}
 			
 			DiscordRPC.Call("Set", "end_timestamp", 0);
@@ -565,7 +540,7 @@ public partial class Phoenyx : Node
 
 		public static string GetProfile()
 		{
-			return File.ReadAllText($"{Constants.UserFolder}/current_profile.txt");
+			return File.ReadAllText($"{Constants.USER_FOLDER}/current_profile.txt");
 		}
 
 		public static ImageTexture GetModIcon(string mod)
