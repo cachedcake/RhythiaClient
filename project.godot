@@ -28,8 +28,8 @@ Keybinds="*res://scripts/KeybindsManager.cs"
 ToastNotification="*res://scripts/ToastNotification.cs"
 SceneManager="*res://scripts/SceneManager.cs"
 SoundManager="*res://scripts/SoundManager.cs"
-Phoenyx="*res://scripts/Phoenyx.cs"
 SettingsManager="*res://scripts/SettingsManager.cs"
+Phoenyx="*res://scripts/Phoenyx.cs"
 
 [debug]
 

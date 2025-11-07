@@ -5,6 +5,12 @@ public partial class SceneManager : Node
     private static Node Node;
     private static bool SkipNextTransition = false;
 
+    // TODO: Pre-loading scenes and swapping them in runtime
+
+    //public static LegacyRunner GameScene = (LegacyRunner)ResourceLoader.Load<PackedScene>("res://scenes/game.tscn").Instantiate();
+    //public static Node LoadingScene = ResourceLoader.Load<PackedScene>("res://scenes/loading.tscn").Instantiate();
+    //public static Node Menu = ResourceLoader.Load<PackedScene>("res://scenes/main_menu.tscn").Instantiate();
+
     public static Node Scene;
 
     public override void _Ready()

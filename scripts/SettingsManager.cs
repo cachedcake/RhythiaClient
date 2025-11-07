@@ -82,9 +82,9 @@ public partial class SettingsManager : Control
             string profile = profiles.GetItemText((int)item);
 
             HideMouse();
-            SettingsManager.Save();
+            Save();
             File.WriteAllText($"{Constants.USER_FOLDER}/current_profile.txt", profile);
-            SettingsManager.Load(profile);
+            Load(profile);
             UpdateSettings();
         };
 
@@ -93,14 +93,14 @@ public partial class SettingsManager : Control
         {
             HideMouse();
             Settings.Skin = skins.GetItemText((int)item);
-            Phoenyx.Skin.Load();
+            PlayerSkin.Load();
 
             if (SceneManager.Scene.Name == "SceneMenu")
             {
-                Menu.MainMenu.Cursor.Texture = Phoenyx.Skin.CursorImage;
+                Menu.MainMenu.Cursor.Texture = PlayerSkin.CursorImage;
             }
 
-            Holder.GetNode("Categories").GetNode("Visuals").GetNode("Container").GetNode("Colors").GetNode<LineEdit>("LineEdit").Text = Phoenyx.Skin.RawColors;
+            Holder.GetNode("Categories").GetNode("Visuals").GetNode("Container").GetNode("Colors").GetNode<LineEdit>("LineEdit").Text = PlayerSkin.RawColors;
         };
 
         spaces.Pressed += ShowMouse;
@@ -217,7 +217,7 @@ public partial class SettingsManager : Control
             case "CursorScale":
                 Settings.CursorScale = (double)value;
 
-                if (SceneManager.Scene.Name == "SceneMenu")
+                if (SceneManager.Scene.Name == "SceneMenu" && Menu.MainMenu.Cursor != null)
                 {
                     Menu.MainMenu.Cursor.Size = new Vector2(32 * (float)Settings.CursorScale, 32 * (float)Settings.CursorScale);
                 }
@@ -442,8 +442,8 @@ public partial class SettingsManager : Control
                                 raw = raw.TrimSuffix(",");
                                 lineEdit.Text = raw;
 
-                                Phoenyx.Skin.Colors = colors;
-                                Phoenyx.Skin.RawColors = raw;
+                                PlayerSkin.Colors = colors;
+                                PlayerSkin.RawColors = raw;
 
                                 break;
                         }
@@ -487,7 +487,7 @@ public partial class SettingsManager : Control
 
     public static void Save(string profile = null)
     {
-        profile ??= Phoenyx.Util.GetProfile();
+        profile ??= Util.GetProfile();
 
         Dictionary data = new()
         {
@@ -500,13 +500,13 @@ public partial class SettingsManager : Control
         }
 
         File.WriteAllText($"{Constants.USER_FOLDER}/profiles/{profile}.json", Json.Stringify(data, "\t"));
-        Phoenyx.Skin.Save();
+        PlayerSkin.Save();
         Logger.Log($"Saved settings {profile}");
     }
 
     public static void Load(string profile = null)
     {
-        profile ??= Phoenyx.Util.GetProfile();
+        profile ??= Util.GetProfile();
 
         Exception err = null;
 
@@ -552,7 +552,7 @@ public partial class SettingsManager : Control
             ToastNotification.Notify($"Could not find skin {Settings.Skin}", 1);
         }
 
-        Phoenyx.Skin.Load();
+        PlayerSkin.Load();
 
         if (err != null)
         {

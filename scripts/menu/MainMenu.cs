@@ -98,11 +98,11 @@ public partial class MainMenu : Control
 
         Control = this;
 
-        Phoenyx.Util.Setup();
+        Util.Setup();
 
-        Phoenyx.Util.DiscordRPC.Call("Set", "details", "Main Menu");
-        Phoenyx.Util.DiscordRPC.Call("Set", "state", "");
-        Phoenyx.Util.DiscordRPC.Call("Set", "end_timestamp", 0);
+        Util.DiscordRPC.Call("Set", "details", "Main Menu");
+        Util.DiscordRPC.Call("Set", "state", "");
+        Util.DiscordRPC.Call("Set", "end_timestamp", 0);
 
         Input.MouseMode = Input.MouseModeEnum.Hidden;
         DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Mailbox);
@@ -243,7 +243,7 @@ public partial class MainMenu : Control
         LoadedMaps = [];
         FavoritedMaps = [];
 
-        Cursor.Texture = Phoenyx.Skin.CursorImage;
+        Cursor.Texture = PlayerSkin.CursorImage;
         Cursor.Size = new Vector2(32 * (float)settings.CursorScale, 32 * (float)settings.CursorScale);
 
         Godot.Collections.Array<Node> jukeboxBars = JukeboxSpectrum.GetChildren();
@@ -274,59 +274,59 @@ public partial class MainMenu : Control
                 switch (holder.Name)
                 {
                     case "GamePlaytime":
-                        value = $"{Math.Floor((double)Phoenyx.Stats.GamePlaytime / 36) / 100} h";
+                        value = $"{Math.Floor((double)Stats.GamePlaytime / 36) / 100} h";
                         break;
                     case "TotalPlaytime":
-                        value = $"{Math.Floor((double)Phoenyx.Stats.TotalPlaytime / 36) / 100} h";
+                        value = $"{Math.Floor((double)Stats.TotalPlaytime / 36) / 100} h";
                         break;
                     case "GamesOpened":
-                        value = Lib.String.PadMagnitude(Phoenyx.Stats.GamesOpened.ToString());
+                        value = Lib.String.PadMagnitude(Stats.GamesOpened.ToString());
                         break;
                     case "TotalDistance":
-                        value = $"{Lib.String.PadMagnitude(((double)Phoenyx.Stats.TotalDistance / 1000).ToString())} m";
+                        value = $"{Lib.String.PadMagnitude(((double)Stats.TotalDistance / 1000).ToString())} m";
                         break;
                     case "NotesHit":
-                        value = Lib.String.PadMagnitude(Phoenyx.Stats.NotesHit.ToString());
+                        value = Lib.String.PadMagnitude(Stats.NotesHit.ToString());
                         break;
                     case "NotesMissed":
-                        value = Lib.String.PadMagnitude(Phoenyx.Stats.NotesMissed.ToString());
+                        value = Lib.String.PadMagnitude(Stats.NotesMissed.ToString());
                         break;
                     case "HighestCombo":
-                        value = Lib.String.PadMagnitude(Phoenyx.Stats.HighestCombo.ToString());
+                        value = Lib.String.PadMagnitude(Stats.HighestCombo.ToString());
                         break;
                     case "Attempts":
-                        value = Lib.String.PadMagnitude(Phoenyx.Stats.Attempts.ToString());
+                        value = Lib.String.PadMagnitude(Stats.Attempts.ToString());
                         break;
                     case "Passes":
-                        value = Lib.String.PadMagnitude(Phoenyx.Stats.Passes.ToString());
+                        value = Lib.String.PadMagnitude(Stats.Passes.ToString());
                         break;
                     case "FullCombos":
-                        value = Lib.String.PadMagnitude(Phoenyx.Stats.FullCombos.ToString());
+                        value = Lib.String.PadMagnitude(Stats.FullCombos.ToString());
                         break;
                     case "HighestScore":
-                        value = Lib.String.PadMagnitude(Phoenyx.Stats.HighestScore.ToString());
+                        value = Lib.String.PadMagnitude(Stats.HighestScore.ToString());
                         break;
                     case "TotalScore":
-                        value = Lib.String.PadMagnitude(Phoenyx.Stats.TotalScore.ToString());
+                        value = Lib.String.PadMagnitude(Stats.TotalScore.ToString());
                         break;
                     case "AverageAccuracy":
                         double sum = 0;
 
-                        foreach (double accuracy in Phoenyx.Stats.PassAccuracies)
+                        foreach (double accuracy in Stats.PassAccuracies)
                         {
                             sum += accuracy;
                         }
 
-                        value = $"{(Phoenyx.Stats.PassAccuracies.Count == 0 ? 0 : Math.Floor(sum / Phoenyx.Stats.PassAccuracies.Count * 100) / 100).ToString().PadDecimals(2)}%";
+                        value = $"{(Stats.PassAccuracies.Count == 0 ? 0 : Math.Floor(sum / Stats.PassAccuracies.Count * 100) / 100).ToString().PadDecimals(2)}%";
                         break;
                     case "RageQuits":
-                        value = Lib.String.PadMagnitude(Phoenyx.Stats.RageQuits.ToString());
+                        value = Lib.String.PadMagnitude(Stats.RageQuits.ToString());
                         break;
                     case "FavouriteMap":
                         string mostPlayedID = null;
                         ulong mostPlayedCount = 0;
 
-                        foreach (KeyValuePair<string, ulong> entry in Phoenyx.Stats.FavouriteMaps)
+                        foreach (KeyValuePair<string, ulong> entry in Stats.FavouriteMaps)
                         {
                             if (entry.Value > mostPlayedCount)
                             {
@@ -534,7 +534,7 @@ public partial class MainMenu : Control
             }
             else
             {
-                favorite.Texture = Phoenyx.Skin.FavoriteImage;
+                favorite.Texture = PlayerSkin.FavoriteImage;
                 File.WriteAllText($"{Constants.USER_FOLDER}/favorites.txt", $"{favorites}{ContextMenuTarget}\n");
                 FavoritedMaps[mapButton] = true;
             }
@@ -800,7 +800,7 @@ public partial class MainMenu : Control
         if (SoundManager.Song.Stream != null)
         {
             JukeboxProgress.AnchorRight = (float)Math.Clamp(SoundManager.Song.GetPlaybackPosition() / SoundManager.Song.Stream.GetLength(), 0, 1);
-            SoundManager.Song.VolumeDb = Mathf.Lerp(SoundManager.Song.VolumeDb, Phoenyx.Util.Quitting ? -80 : -80 + 70 * (float)Math.Pow(settings.VolumeMusic / 100, 0.1) * (float)Math.Pow(settings.VolumeMaster / 100, 0.1), (float)Math.Clamp(delta * 2, 0, 1));
+            SoundManager.Song.VolumeDb = Mathf.Lerp(SoundManager.Song.VolumeDb, Util.Quitting ? -80 : -80 + 70 * (float)Math.Pow(settings.VolumeMusic / 100, 0.1) * (float)Math.Pow(settings.VolumeMaster / 100, 0.1), (float)Math.Clamp(delta * 2, 0, 1));
         }
 
         float prevHz = 0;
@@ -848,7 +848,7 @@ public partial class MainMenu : Control
         Main.Position = Main.Position.Lerp((Size / 2 - MousePosition) * (4 / Size.Y), Math.Min(1, (float)delta * 16));
         Extras.Position = Main.Position;
 
-        if (Phoenyx.Util.Quitting)
+        if (Util.Quitting)
         {
             MainBackgroundMaterial.SetShaderParameter("opaqueness", Mathf.Lerp((float)MainBackgroundMaterial.GetShaderParameter("opaqueness"), 0, delta * 8));
         }
@@ -1227,13 +1227,13 @@ public partial class MainMenu : Control
         switch (CurrentMenu)
         {
             case "Main":
-                Phoenyx.Util.DiscordRPC.Call("Set", "details", "Main Menu");
+                Util.DiscordRPC.Call("Set", "details", "Main Menu");
                 break;
             case "Play":
-                Phoenyx.Util.DiscordRPC.Call("Set", "details", "Browsing Maps");
+                Util.DiscordRPC.Call("Set", "details", "Browsing Maps");
                 break;
             case "Extras":
-                Phoenyx.Util.DiscordRPC.Call("Set", "details", "Extras");
+                Util.DiscordRPC.Call("Set", "details", "Extras");
                 break;
         }
 
@@ -1374,7 +1374,7 @@ public partial class MainMenu : Control
                 if (favorited)
                 {
                     TextureRect favorite = holder.GetNode<TextureRect>("Favorited");
-                    favorite.Texture = Phoenyx.Skin.FavoriteImage;
+                    favorite.Texture = PlayerSkin.FavoriteImage;
                     favorite.Visible = true;
                 }
 
@@ -1493,7 +1493,7 @@ public partial class MainMenu : Control
                 if (entry.Value)
                 {
                     TextureRect mod = modifierTemplate.Duplicate() as TextureRect;
-                    mod.Texture = Phoenyx.Util.GetModIcon(entry.Key);
+                    mod.Texture = Util.GetModIcon(entry.Key);
                     mod.Visible = true;
                     modifiersContainer.AddChild(mod);
                 }
@@ -1536,6 +1536,6 @@ public partial class MainMenu : Control
 
     public static void UpdateJukeboxButtons()
     {
-        Jukebox.GetNode<TextureButton>("Pause").TextureNormal = SoundManager.JukeboxPaused ? Phoenyx.Skin.JukeboxPlayImage : Phoenyx.Skin.JukeboxPauseImage;
+        Jukebox.GetNode<TextureButton>("Pause").TextureNormal = SoundManager.JukeboxPaused ? PlayerSkin.JukeboxPlayImage : PlayerSkin.JukeboxPauseImage;
     }
 }

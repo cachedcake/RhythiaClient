@@ -90,7 +90,7 @@ public partial class SoundManager : Node
 
         if (setRichPresence)
         {
-            Phoenyx.Util.DiscordRPC.Call("Set", "state", $"Listening to {Map.PrettyTitle}");
+            Util.DiscordRPC.Call("Set", "state", $"Listening to {Map.PrettyTitle}");
         }
     }
 
@@ -106,8 +106,8 @@ public partial class SoundManager : Node
 
     public static void UpdateSounds()
     {
-        HitSound.Stream = Lib.Audio.LoadStream(Phoenyx.Skin.HitSoundBuffer);
-        FailSound.Stream = Lib.Audio.LoadStream(Phoenyx.Skin.FailSoundBuffer);
+        HitSound.Stream = Lib.Audio.LoadStream(PlayerSkin.HitSoundBuffer);
+        FailSound.Stream = Lib.Audio.LoadStream(PlayerSkin.FailSoundBuffer);
     }
 
     public static void UpdateVolume()

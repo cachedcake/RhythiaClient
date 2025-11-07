@@ -2,6 +2,7 @@
 .vscode/
 # Visual Studio
 .vs/
+Properties/
 
 # Git
 .git/

@@ -27,7 +27,7 @@ public partial class Results : Control
         Input.MouseMode = Input.MouseModeEnum.Hidden;
         DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Mailbox);
 
-        Cursor.Texture = Phoenyx.Skin.CursorImage;
+        Cursor.Texture = PlayerSkin.CursorImage;
         Cursor.Size = new Vector2(32 * (float)settings.CursorScale, 32 * (float)settings.CursorScale);
 
         Holder.GetNode<Label>("Title").Text = (LegacyRunner.CurrentAttempt.IsReplay ? "[REPLAY] " : "") + LegacyRunner.CurrentAttempt.Map.PrettyTitle;
@@ -49,7 +49,7 @@ public partial class Results : Control
                 TextureRect icon = modTemplate.Duplicate() as TextureRect;
 
                 icon.Visible = true;
-                icon.Texture = Phoenyx.Util.GetModIcon(mod.Key);
+                icon.Texture = Util.GetModIcon(mod.Key);
 
                 modifiersContainer.AddChild(icon);
             }

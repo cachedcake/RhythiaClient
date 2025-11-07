@@ -105,7 +105,7 @@ public partial class LegacyRunner : Node3D
 		public bool Qualifies = true;
 		public uint Hits = 0;
 		public float[] HitsInfo = [];
-		public Color LastHitColour = Phoenyx.Skin.Colors[^1];
+		public Color LastHitColour = PlayerSkin.Colors[^1];
 		public uint Misses = 0;
 		public double DeathTime = -1;
 		public uint Sum = 0;
@@ -234,18 +234,18 @@ public partial class LegacyRunner : Node3D
 			Combo++;
 			ComboMultiplierProgress++;
 
-			LastHitColour = Phoenyx.Skin.Colors[index % Phoenyx.Skin.Colors.Length];
+			LastHitColour = PlayerSkin.Colors[index % PlayerSkin.Colors.Length];
 
 			float lateness = IsReplay ? HitsInfo[index] : (float)(((int)Progress - Map.Notes[index].Millisecond) / Speed);
 			float factor = 1 - Math.Max(0, lateness - 25) / 150f;
 			
 			if (!IsReplay)
 			{
-				Phoenyx.Stats.NotesHit++;
+				Stats.NotesHit++;
 
-				if (Combo > Phoenyx.Stats.HighestCombo)
+				if (Combo > Stats.HighestCombo)
 				{
-					Phoenyx.Stats.HighestCombo = Combo;
+					Stats.HighestCombo = Combo;
 				}
 
 				HitsInfo[index] = lateness;
@@ -326,7 +326,7 @@ public partial class LegacyRunner : Node3D
 			if (!IsReplay)
 			{
 				HitsInfo[index] = -1;
-				Phoenyx.Stats.NotesMissed++;
+				Stats.NotesMissed++;
 			}
 
 			//if (Health - HealthStep <= 0)
@@ -382,7 +382,7 @@ public partial class LegacyRunner : Node3D
 			Sprite3D icon = MissFeedback.Instantiate<Sprite3D>();
 			Node3D.AddChild(icon);
 			icon.GlobalPosition = new Vector3(Map.Notes[index].X, -1.4f, 0);
-			icon.Texture = Phoenyx.Skin.MissFeedbackImage;
+			icon.Texture = PlayerSkin.MissFeedbackImage;
 
 			Tween tween = icon.CreateTween();
 			tween.TweenProperty(icon, "transparency", 1, 0.25f);
@@ -509,7 +509,7 @@ public partial class LegacyRunner : Node3D
 			AddChild(icon);
 
 			icon.Position = new(i * 1.5f - activeMods.Count / 1.5f, -8.5f, -10f);
-			icon.Texture = Phoenyx.Util.GetModIcon(activeMods[i]);
+			icon.Texture = Util.GetModIcon(activeMods[i]);
 		}
 
 		Panel menuButtonsHolder = Menu.GetNode<Panel>("Holder");
@@ -642,9 +642,9 @@ public partial class LegacyRunner : Node3D
 		MultiplierProgressMaterial.SetShaderParameter("colour", MultiplierColour);
 		MultiplierProgressMaterial.SetShaderParameter("sides", Math.Clamp(CurrentAttempt.ComboMultiplierIncrement, 3, 32));
 
-		Phoenyx.Util.DiscordRPC.Call("Set", "details", "Playing a Map");
-		Phoenyx.Util.DiscordRPC.Call("Set", "state", CurrentAttempt.Map.PrettyTitle);
-		Phoenyx.Util.DiscordRPC.Call("Set", "end_timestamp", Time.GetUnixTimeFromSystem() + CurrentAttempt.Map.Length / 1000 / CurrentAttempt.Speed);
+		Util.DiscordRPC.Call("Set", "details", "Playing a Map");
+		Util.DiscordRPC.Call("Set", "state", CurrentAttempt.Map.PrettyTitle);
+		Util.DiscordRPC.Call("Set", "end_timestamp", Time.GetUnixTimeFromSystem() + CurrentAttempt.Map.Length / 1000 / CurrentAttempt.Speed);
 
 		Input.MouseMode = settings.AbsoluteInput || CurrentAttempt.IsReplay ? Input.MouseModeEnum.ConfinedHidden : Input.MouseModeEnum.Captured;
 		Input.UseAccumulatedInput = false;
@@ -654,18 +654,18 @@ public partial class LegacyRunner : Node3D
 
 		try
 		{
-			(Cursor.GetActiveMaterial(0) as StandardMaterial3D).AlbedoTexture = Phoenyx.Skin.CursorImage;
-			(CursorTrailMultimesh.MaterialOverride as StandardMaterial3D).AlbedoTexture = Phoenyx.Skin.CursorImage;
-			(Grid.GetActiveMaterial(0) as StandardMaterial3D).AlbedoTexture = Phoenyx.Skin.GridImage;
-			PanelLeft.GetNode<TextureRect>("Background").Texture = Phoenyx.Skin.PanelLeftBackgroundImage;
-			PanelRight.GetNode<TextureRect>("Background").Texture = Phoenyx.Skin.PanelRightBackgroundImage;
-			HealthTexture.Texture = Phoenyx.Skin.HealthImage;
-			HealthTexture.GetParent().GetNode<TextureRect>("Background").Texture = Phoenyx.Skin.HealthBackgroundImage;
-			ProgressBarTexture.Texture = Phoenyx.Skin.ProgressImage;
-			ProgressBarTexture.GetParent().GetNode<TextureRect>("Background").Texture = Phoenyx.Skin.ProgressBackgroundImage;
-			PanelRight.GetNode<TextureRect>("HitsIcon").Texture = Phoenyx.Skin.HitsImage;
-			PanelRight.GetNode<TextureRect>("MissesIcon").Texture = Phoenyx.Skin.MissesImage;
-			NotesMultimesh.Multimesh.Mesh = Phoenyx.Skin.NoteMesh;
+			(Cursor.GetActiveMaterial(0) as StandardMaterial3D).AlbedoTexture = PlayerSkin.CursorImage;
+			(CursorTrailMultimesh.MaterialOverride as StandardMaterial3D).AlbedoTexture = PlayerSkin.CursorImage;
+			(Grid.GetActiveMaterial(0) as StandardMaterial3D).AlbedoTexture = PlayerSkin.GridImage;
+			PanelLeft.GetNode<TextureRect>("Background").Texture = PlayerSkin.PanelLeftBackgroundImage;
+			PanelRight.GetNode<TextureRect>("Background").Texture = PlayerSkin.PanelRightBackgroundImage;
+			HealthTexture.Texture = PlayerSkin.HealthImage;
+			HealthTexture.GetParent().GetNode<TextureRect>("Background").Texture = PlayerSkin.HealthBackgroundImage;
+			ProgressBarTexture.Texture = PlayerSkin.ProgressImage;
+			ProgressBarTexture.GetParent().GetNode<TextureRect>("Background").Texture = PlayerSkin.ProgressBackgroundImage;
+			PanelRight.GetNode<TextureRect>("HitsIcon").Texture = PlayerSkin.HitsImage;
+			PanelRight.GetNode<TextureRect>("MissesIcon").Texture = PlayerSkin.MissesImage;
+			NotesMultimesh.Multimesh.Mesh = PlayerSkin.NoteMesh;
 		}
 		catch (Exception exception)
 		{
@@ -673,7 +673,7 @@ public partial class LegacyRunner : Node3D
 			throw Logger.Error($"Could not load skin; {exception.Message}");
 		}
 
-		string space = settings.Space == "skin" ? Phoenyx.Skin.Space : settings.Space;
+		string space = settings.Space == "skin" ? PlayerSkin.Space : settings.Space;
 
 		if (space != "void")
 		{
@@ -1141,15 +1141,15 @@ public partial class LegacyRunner : Node3D
 		
 		if (!CurrentAttempt.IsReplay)
 		{
-			Phoenyx.Stats.Attempts++;
+			Stats.Attempts++;
 			
-			if (!Phoenyx.Stats.FavouriteMaps.ContainsKey(map.ID))
+			if (!Stats.FavouriteMaps.ContainsKey(map.ID))
 			{
-				Phoenyx.Stats.FavouriteMaps[map.ID] = 1;
+				Stats.FavouriteMaps[map.ID] = 1;
 			}
 			else
 			{
-				Phoenyx.Stats.FavouriteMaps[map.ID]++;
+				Stats.FavouriteMaps[map.ID]++;
 			}
 		}
 	}
@@ -1177,7 +1177,7 @@ public partial class LegacyRunner : Node3D
 			{
 				CurrentAttempt.Progress = CurrentAttempt.Map.Notes[CurrentAttempt.PassedNotes].Millisecond - settings.ApproachTime * 1500 * CurrentAttempt.Speed; // turn AT to ms and multiply by 1.5x
 				
-				Phoenyx.Util.DiscordRPC.Call("Set", "end_timestamp", Time.GetUnixTimeFromSystem() + (CurrentAttempt.Map.Length - CurrentAttempt.Progress) / 1000 / CurrentAttempt.Speed);
+				Util.DiscordRPC.Call("Set", "end_timestamp", Time.GetUnixTimeFromSystem() + (CurrentAttempt.Map.Length - CurrentAttempt.Progress) / 1000 / CurrentAttempt.Speed);
 				
 				if (CurrentAttempt.Map.AudioBuffer != null)
 				{
@@ -1215,8 +1215,8 @@ public partial class LegacyRunner : Node3D
 		
 		if (!CurrentAttempt.IsReplay)
 		{
-			Phoenyx.Stats.GamePlaytime += (Time.GetTicksUsec() - Started) / 1000000;
-			Phoenyx.Stats.TotalDistance += (ulong)CurrentAttempt.DistanceMM;
+			Stats.GamePlaytime += (Time.GetTicksUsec() - Started) / 1000000;
+			Stats.TotalDistance += (ulong)CurrentAttempt.DistanceMM;
 				
 			if (CurrentAttempt.StartFrom == 0)
 			{
@@ -1234,20 +1234,20 @@ public partial class LegacyRunner : Node3D
 				
 				if (CurrentAttempt.Qualifies)
 				{
-					Phoenyx.Stats.Passes++;
-					Phoenyx.Stats.TotalScore += CurrentAttempt.Score;
+					Stats.Passes++;
+					Stats.TotalScore += CurrentAttempt.Score;
 					
 					if (CurrentAttempt.Accuracy == 100)
 					{
-						Phoenyx.Stats.FullCombos++;
+						Stats.FullCombos++;
 					}
 					
-					if (CurrentAttempt.Score > Phoenyx.Stats.HighestScore)
+					if (CurrentAttempt.Score > Stats.HighestScore)
 					{
-						Phoenyx.Stats.HighestScore = CurrentAttempt.Score;
+						Stats.HighestScore = CurrentAttempt.Score;
 					}
 					
-					Phoenyx.Stats.PassAccuracies.Add(CurrentAttempt.Accuracy);
+					Stats.PassAccuracies.Add(CurrentAttempt.Accuracy);
 				}
 			}
 		}
