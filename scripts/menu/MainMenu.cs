@@ -183,8 +183,8 @@ public partial class MainMenu : Control
                             }
 
                             SoundManager.Song.Stop();
-                            LegacyRunner.Play(MapParser.Decode(matching[0].MapFilePath), matching[0].Speed, matching[0].StartFrom, matching[0].Modifiers, null, [.. matching]); // Same here
                             SceneManager.Load("res://scenes/game.tscn");
+                            LegacyRunner.Play(MapParser.Decode(matching[0].MapFilePath), matching[0].Speed, matching[0].StartFrom, matching[0].Modifiers, null, [.. matching]);
                             break;
                     }
                 }
@@ -887,10 +887,10 @@ public partial class MainMenu : Control
                         Map map = MapParser.Decode($"{Constants.USER_FOLDER}/maps/{SelectedMapID}.phxm");
 
                         SoundManager.Song.Stop();
-                        LegacyRunner.Play(map, Lobby.Speed, Lobby.StartFrom, Lobby.Mods);
-                        SceneManager.Load("res://scenes/game.tscn");
-                        // TODO: Fix this :/
                         
+                        SceneManager.Load("res://scenes/game.tscn");
+                        LegacyRunner.Play(map, Lobby.Speed, Lobby.StartFrom, Lobby.Mods);
+
                     }
                     break;
                 case Key.Mediaplay:
@@ -1105,8 +1105,9 @@ public partial class MainMenu : Control
                     Map map = MapParser.Decode($"{Constants.USER_FOLDER}/maps/{fileName}.phxm");
 
                     SoundManager.Song.Stop();
-                    LegacyRunner.Play(map, Lobby.Speed, Lobby.StartFrom, Lobby.Mods);
+                    
                     SceneManager.Load("res://scenes/game.tscn");
+                    LegacyRunner.Play(map, Lobby.Speed, Lobby.StartFrom, Lobby.Mods);
                 }
             }
 

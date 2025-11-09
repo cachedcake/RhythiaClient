@@ -34,8 +34,8 @@ public partial class Loading : Control
         await Task.Delay(2500);
 
         Tween outTween = Control.CreateTween();
-        outTween.TweenProperty(Background, "color", Color.Color8(0, 0, 0, 0), 0.5).SetTrans(Tween.TransitionType.Quad);
-        outTween.Parallel().TweenProperty(Splash, "modulate", Color.Color8(0, 0, 0, 0), 0.5).SetTrans(Tween.TransitionType.Quad);
+        outTween.TweenProperty(Background, "color", Color.Color8(0, 0, 0, 255), 0.5).SetTrans(Tween.TransitionType.Quad);
+        outTween.Parallel().TweenProperty(Splash, "modulate", Color.Color8(0, 0, 0, 255), 0.5).SetTrans(Tween.TransitionType.Quad);
         outTween.TweenCallback(Callable.From(() =>
         {
             SceneManager.Load("res://scenes/main_menu.tscn");

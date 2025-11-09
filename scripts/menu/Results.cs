@@ -102,8 +102,9 @@ public partial class Results : Control
             {
                 Replay replay = new(path);
                 SoundManager.Song.Stop();
-                LegacyRunner.Play(MapParser.Decode(replay.MapFilePath), replay.Speed, replay.StartFrom, replay.Modifiers, null, [replay]);
+                
                 SceneManager.Load("res://scenes/game.tscn");
+                LegacyRunner.Play(MapParser.Decode(replay.MapFilePath), replay.Speed, replay.StartFrom, replay.Modifiers, null, [replay]);
             }
         };
     }

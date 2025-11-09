@@ -1159,7 +1159,7 @@ public partial class LegacyRunner : Node3D
 		CurrentAttempt.Alive = false;
 		CurrentAttempt.Qualifies = false;
 		Stop(false);
-        // fml
+
         SceneManager.ReloadCurrentScene();
 		Play(MapParser.Decode(CurrentAttempt.Map.FilePath), CurrentAttempt.Speed, CurrentAttempt.StartFrom, CurrentAttempt.Mods, CurrentAttempt.Players, CurrentAttempt.Replays);
 	}

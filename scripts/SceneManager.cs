@@ -14,17 +14,13 @@ public partial class SceneManager : Node
 {
     public static Node Node { get; private set; }
 
-    private static Callable? callable;
-    private static bool SkipNextTransition = false;
+    private static bool skipNextTransition = false;
 
     public static Node ActiveScene;
     private static string activeScenePath;
 
-    private static SubViewportContainer sceneContainer;
     private static SubViewportContainer backgroundContainer;
-
-    private static SubViewport defaultViewport;
-    private static SubViewport subViewportUI;
+    private static SubViewport backgroundViewport;
 
     private static Dictionary<string, Node> scenes;
 
@@ -32,51 +28,41 @@ public partial class SceneManager : Node
 
     public override void _Ready()
     {
-        // Python referenced...
         if (Name != "Main")
         {
             return;
         }
-        
-        Node = this;
 
-        sceneContainer = Node.GetNode<SubViewportContainer>("Scene");
+        Node = this;
         backgroundContainer = Node.GetNode<SubViewportContainer>("Background");
 
-        subViewportUI = backgroundContainer.GetNode<SubViewport>("SubViewport");
-        defaultViewport = sceneContainer.GetNode<SubViewport>("SubViewport");
+        backgroundViewport = backgroundContainer.GetNode<SubViewport>("SubViewport");
 
-        Load("res://scenes/loading.tscn");
+        Load("res://scenes/loading.tscn", true);
 
-
-        //callable = Callable.From((Node child) =>
+        //Node.GetTree().Connect("node_added", Callable.From((Node child) =>
         //{
         //    if (child.Name != "SceneMenu" && child.Name != "SceneGame" && child.Name != "SceneResults")
         //    {
         //        return;
         //    }
 
-        //    Scene = child;
-
-        //    if (SkipNextTransition)
+        //    if (skipNextTransition)
         //    {
-        //        SkipNextTransition = false;
+        //        skipNextTransition = false;
         //        return;
         //    }
 
-        //    ColorRect inTransition = Scene.GetNode<ColorRect>("Transition");
+        //    ColorRect inTransition = ActiveScene.GetNode<ColorRect>("Transition");
         //    inTransition.SelfModulate = Color.FromHtml("ffffffff");
         //    Tween inTween = inTransition.CreateTween();
         //    inTween.TweenProperty(inTransition, "self_modulate", Color.FromHtml("ffffff00"), 0.25).SetTrans(Tween.TransitionType.Quad);
         //    inTween.Play();
-        //});
-
-        //Node.GetTree().Connect("node_added", (Callable)callable);
+        //}));
     }
 
     public static void ReloadCurrentScene()
     {
-        ActiveScene.QueueFree();
         Load(activeScenePath);
     }
 
@@ -94,35 +80,40 @@ public partial class SceneManager : Node
     public static void Load(string path, bool skipTransition = false)
     {
 
+        if (skipTransition)
+        {
+            skipNextTransition = true;
+            swapScene(path);
+        }
+        else
+        {
+            ColorRect outTransition = ActiveScene.GetNode<ColorRect>("Transition");
+            Tween outTween = outTransition.CreateTween();
+            outTween.TweenProperty(outTransition, "self_modulate", Color.FromHtml("ffffffff"), 0.25).SetTrans(Tween.TransitionType.Quad);
+            outTween.TweenCallback(Callable.From(() =>
+            {
+                swapScene(path);
+            }));
+            outTween.Play();
+        }
+    }
+
+    private static void swapScene(string path)
+    {
         if (ActiveScene != null && ActiveScene.GetParent() != null)
         {
-            ActiveScene.GetParent().RemoveChild(ActiveScene);
+            Node.RemoveChild(ActiveScene);
         }
 
         var node = ResourceLoader.Load<PackedScene>(path).Instantiate();
 
         activeScenePath = path;
         ActiveScene = node;
-        defaultViewport.AddChild(node);
+        Node.AddChild(node);
     }
 
     public static void ALoad(string path, bool skipTransition = false)
     {
-        if (skipTransition)
-        {
-            SkipNextTransition = true;
-            Node.GetTree().ChangeSceneToFile(path);
-        }
-        else
-        {
-            ColorRect outTransition = Scene.GetNode<ColorRect>("Transition");
-            Tween outTween = outTransition.CreateTween();
-            outTween.TweenProperty(outTransition, "self_modulate", Color.FromHtml("ffffffff"), 0.25).SetTrans(Tween.TransitionType.Quad);
-            outTween.TweenCallback(Callable.From(() =>
-            {
-                Node.GetTree().ChangeSceneToFile(path);
-            }));
-            outTween.Play();
-        }
+
     }
 }
