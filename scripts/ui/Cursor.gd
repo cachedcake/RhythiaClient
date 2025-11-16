@@ -1,7 +1,7 @@
 extends TextureRect
 
-#var SkinProfile = load("res://scripts/skinning/SkinProfile.cs").new()
-#var SettingsManager = load("res://scripts/SettingsManager.cs").new()
+#var SkinProfile = load("res://scripts/skinning/SkinProfile.cs")
+#var SettingsManager = load("res://scripts/SettingsManager.cs")
 
 var mousePosition := Vector2.ZERO
 
@@ -19,6 +19,7 @@ func _input(event: InputEvent) -> void:
 		mousePosition = event.position
 
 func UpdateTexture() -> void:
+	#texture = SkinProfile.CursorImage
 	pass
 
 func UpdateSize() -> void:

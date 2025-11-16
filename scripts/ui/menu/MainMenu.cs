@@ -1023,7 +1023,7 @@ public partial class MainMenu : Control
 		}
 	}
 
-	public static Dictionary<string, bool> Import(string[] files)
+	public static void Import(string[] files)
 	{
 		List<string> maps = [];
 
@@ -1035,11 +1035,12 @@ public partial class MainMenu : Control
 			}
 		}
 
-		Dictionary<string, bool> results = MapParser.BulkImport([.. maps]);
+		//Dictionary<string, bool> results = MapParser.BulkImport([.. maps]);
+		MapParser.BulkImport([.. maps]);
 
 		if (maps.Count == 0)
 		{
-			return results;
+			//return results;
 		}
 
 		SoundManager.UpdateJukeboxQueue();
@@ -1051,7 +1052,7 @@ public partial class MainMenu : Control
 			Select(maps[0].GetFile().GetBaseName(), true);
 		}
 
-		return results;
+		//return results;
 	}
 
 	public static void Search()

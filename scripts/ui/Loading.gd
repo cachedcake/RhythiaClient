@@ -15,10 +15,10 @@ func _ready() -> void:
 	inTween.chain().tween_property(splashShift, "modulate", Color.TRANSPARENT, 2.5)
 	
 	inTween.chain().tween_callback(func():
-		var outTween := create_tween().set_trans(Tween.TRANS_QUAD)
+		var outTween := create_tween().set_trans(Tween.TRANS_QUAD).set_parallel()
 		outTween.tween_property(background, "color", Color.BLACK, 0.5)
 		outTween.tween_property(splash, "modulate", Color.BLACK, 0.5)
-		outTween.tween_callback(func():
+		outTween.chain().tween_callback(func():
 			SceneManager.Load("res://scenes/main_menu.tscn", false)
 		)
 	)

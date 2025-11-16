@@ -30,6 +30,7 @@ SceneManager="*res://scripts/SceneManager.cs"
 Phoenyx="*res://scripts/Phoenyx.cs"
 SkinProfile="*res://scripts/skinning/SkinProfile.cs"
 MapParser="*res://scripts/map/MapParser.cs"
+Constants="*res://scripts/Constants.cs"
 
 [debug]
 

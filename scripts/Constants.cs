@@ -1,13 +1,12 @@
-
 using System.IO;
 using Godot;
 
-public static class Constants
+public partial class Constants : Node
 {
-	public static readonly ulong STARTED = Time.GetTicksUsec();
+    public static readonly ulong STARTED = Time.GetTicksUsec();
 
 	public static readonly string ROOT_FOLDER = Directory.GetCurrentDirectory();
-
+	
 	public static readonly string USER_FOLDER = OS.GetUserDataDir();
 
 	public static readonly bool TEMP_MAP_MODE = false;//OS.GetCmdlineArgs().Length > 0;
