@@ -18,6 +18,11 @@ public partial class Grid : UIComponent
         updateCursorPosition(state.CursorPosition);
     }
 
+    private void updateGridPosition(Vector2 position)
+    {
+
+    }
+
     private void updateCursorPosition(Vector2 position)
     {
         Cursor.Position = new Vector3(position.X, position.Y, 0);

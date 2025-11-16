@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://c5vpshhxaukbo" path="res://scripts/ui/Loading.gd" id="1_dhqfv"]
 [ext_resource type="Texture2D" uid="uid://ccbh012f7wiij" path="res://textures/boot_splash.png" id="2_101rs"]
 [ext_resource type="Shader" uid="uid://ujothoxymyrm" path="res://scripts/shaders/loading_splash.gdshader" id="2_dhqfv"]
+[ext_resource type="Texture2D" uid="uid://ccbh012f7wiij" path="res://textures/boot_splash.png" id="2_yt702"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_101rs"]
 
@@ -38,7 +39,7 @@ anchor_right = 1.0
 anchor_bottom = 0.8
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_101rs")
+texture = ExtResource("2_yt702")
 expand_mode = 1
 stretch_mode = 5
 
@@ -52,7 +53,7 @@ anchor_right = 1.0
 anchor_bottom = 0.8
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_101rs")
+texture = ExtResource("2_yt702")
 expand_mode = 1
 stretch_mode = 5
 
