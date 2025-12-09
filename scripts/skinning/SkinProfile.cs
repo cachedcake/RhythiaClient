@@ -38,6 +38,22 @@ public partial class SkinProfile : GodotObject
 
     public ImageTexture FavoriteImage { get; set; } = new();
 
+    public ImageTexture MapListMaskImage { get; set; } = new();
+
+    public ImageTexture MapListSelectionCursorImage { get; set; } = new();
+
+    public ImageTexture MapListScrollBarTopImage { get; set; } = new();
+
+    public ImageTexture MapListScrollBarMiddleImage { get; set; } = new();
+
+    public ImageTexture MapListScrollBarBottomImage { get; set; } = new();
+
+    public ImageTexture MapListScrollBarBackgroundTopImage { get; set; } = new();
+
+    public ImageTexture MapListScrollBarBackgroundMiddleImage { get; set; } = new();
+
+    public ImageTexture MapListScrollBarBackgroundBottomImage { get; set; } = new();
+
     public ImageTexture ModNofailImage { get; set; } = new();
 
     public ImageTexture ModSpinImage { get; set; } = new();
@@ -49,6 +65,12 @@ public partial class SkinProfile : GodotObject
     public ImageTexture ModFlashlightImage { get; set; } = new();
 
     public ImageTexture ModHardrockImage { get; set; } = new();
+
+    public ImageTexture BackgroundTileImage { get; set; } = new();
+
+    public Shader BackgroundTileShader { get; set; } = new();
+
+    public Shader MapButtonCoverShader { get; set; } = new();
 
     public byte[] HitSoundBuffer { get; set; } = [];
 

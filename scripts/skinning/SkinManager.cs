@@ -2,6 +2,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Godot;
 using System.Reflection;
+using Godot.NativeInterop;
 
 [GlobalClass]
 public partial class SkinManager : Node
@@ -73,8 +74,17 @@ public partial class SkinManager : Node
 		skin.JukeboxSkipImage = loadTexture("ui/jukebox_skip.png");
 
 		skin.FavoriteImage = loadTexture("ui/play/favorite.png");
+        skin.BackgroundTileImage = loadTexture("ui/play/background_tile.png");
+		skin.MapListMaskImage = loadTexture("ui/play/maplist_mask.png");
+		skin.MapListSelectionCursorImage = loadTexture("ui/play/maplist_selection_cursor.png");
+        skin.MapListScrollBarTopImage = loadTexture("ui/play/scrollbar_top.png");
+		skin.MapListScrollBarMiddleImage = loadTexture("ui/play/scrollbar_middle.png");
+		skin.MapListScrollBarBottomImage = loadTexture("ui/play/scrollbar_bottom.png");
+		skin.MapListScrollBarBackgroundTopImage = loadTexture("ui/play/scrollbar_background_top.png");
+		skin.MapListScrollBarBackgroundMiddleImage = loadTexture("ui/play/scrollbar_background_middle.png");
+		skin.MapListScrollBarBackgroundBottomImage = loadTexture("ui/play/scrollbar_background_bottom.png");
 
-		skin.ModNofailImage = loadTexture("modifiers/nofail.png");
+        skin.ModNofailImage = loadTexture("modifiers/nofail.png");
 		skin.ModSpinImage = loadTexture("modifiers/spin.png");
 		skin.ModGhostImage = loadTexture("modifiers/ghost.png");
 		skin.ModChaosImage = loadTexture("modifiers/chaos.png");
@@ -98,9 +108,14 @@ public partial class SkinManager : Node
         skin.MenuSpaceName = "waves";
 		skin.MenuSpace = loadSpace(skin.MenuSpaceName);
 
-		//
+		// Shaders
 
-		ToastNotification.Notify($"Loaded skin [{settings.Skin.Value}]");
+		skin.BackgroundTileShader = loadShader("ui/play/background_tile.gdshader");
+        skin.MapButtonCoverShader = loadShader("ui/play/map_button_cover.gdshader");
+
+        //
+
+        ToastNotification.Notify($"Loaded skin [{settings.Skin.Value}]");
 		Logger.Log($"Loaded skin {settings.Skin.Value}");
 
 		Instance.EmitSignal(SignalName.OnLoaded);
@@ -140,6 +155,14 @@ public partial class SkinManager : Node
 			return GD.Load<ArrayMesh>($"res://skin/note.obj");
 		}
 	}
+
+	private static Shader loadShader(string skinPath)
+	{
+		var settings = SettingsManager.Instance.Settings;
+        string shader = File.ReadAllText($"{Constants.USER_FOLDER}/skins/{settings.Skin.Value}/{skinPath}");
+
+        return new() { Code = shader };
+    }
 
 	private static Node3D loadSpace(string space)
 	{

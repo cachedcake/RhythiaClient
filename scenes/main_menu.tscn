@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=3 uid="uid://do18270a428ma"]
+[gd_scene load_steps=80 format=3 uid="uid://do18270a428ma"]
 
 [ext_resource type="Shader" uid="uid://c7ldko1kfg2ho" path="res://scripts/shaders/noise_waves.gdshader" id="1_3wgol"]
 [ext_resource type="Script" uid="uid://j2paynyu362u" path="res://scripts/ui/menu/MainMenu.cs" id="1_yxnar"]
@@ -10,8 +10,9 @@
 [ext_resource type="StyleBox" uid="uid://bfimbyi3x5h0n" path="res://theme/line_edit_stylebox_normal.tres" id="8_dj67d"]
 [ext_resource type="Script" uid="uid://bnead3awk7yr4" path="res://scripts/ui/menu/SettingsMenuButton.cs" id="8_yxnar"]
 [ext_resource type="Script" uid="uid://byighsqkmf2c4" path="res://scripts/ui/menu/QuitButton.cs" id="9_yxnar"]
-[ext_resource type="Texture2D" uid="uid://cbbafomdyoenp" path="res://skin/ui/play/background_tile.png" id="10_jvjdd"]
-[ext_resource type="Shader" uid="uid://dgoi2tf33xnmj" path="res://skin/ui/play/background_tile.gdshader" id="10_yxnar"]
+[ext_resource type="Script" uid="uid://cqprxe41p0qov" path="res://scripts/ui/menu/Background.cs" id="10_eku7s"]
+[ext_resource type="Texture2D" uid="uid://cbbafomdyoenp" path="res://skin/ui/background_tile.png" id="10_jvjdd"]
+[ext_resource type="Shader" uid="uid://dgoi2tf33xnmj" path="res://skin/ui/background_tile.gdshader" id="10_yxnar"]
 [ext_resource type="Texture2D" uid="uid://co5ul5mlsanna" path="res://skin/modifiers/nofail.png" id="12_tcusk"]
 [ext_resource type="Script" uid="uid://dsq135xacv1vh" path="res://scripts/ui/menu/MapList.cs" id="12_yxnar"]
 [ext_resource type="Texture2D" uid="uid://d1c7yqqmohmv1" path="res://skin/modifiers/ghost.png" id="13_4puye"]
@@ -466,6 +467,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_u43bj")
+script = ExtResource("10_eku7s")
 
 [node name="Tile" type="TextureRect" parent="Menus/Play/Background"]
 material = SubResource("ShaderMaterial_eku7s")

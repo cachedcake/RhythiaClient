@@ -29,8 +29,16 @@ public partial class MapList : Panel
     public bool DisplaySelectionCursor = false;
 
     private TextureRect mask;
-    private Panel scrollBar;
     private TextureRect selectionCursor;
+    private Panel scrollBar;
+    private Panel scrollBarMain;
+    private TextureRect scrollBarMainTop;
+    private TextureRect scrollBarMainMiddle;
+    private TextureRect scrollBarMainBottom;
+    private Panel scrollBarBackground;
+    private TextureRect scrollBarBackgroundTop;
+    private TextureRect scrollBarBackgroundMiddle;
+    private TextureRect scrollBarBackgroundBottom;
 
     private readonly PackedScene mapButtonTemplate = ResourceLoader.Load<PackedScene>("res://prefabs/map_button.tscn");
     private List<Map> maps = [];	// (queried) map IDs, get this from db in the future
@@ -42,11 +50,22 @@ public partial class MapList : Panel
     public override void _Ready()
     {
         mask = GetNode<TextureRect>("Mask");
-        scrollBar = GetNode("ScrollBar").GetNode<Panel>("Main");
         selectionCursor = GetNode<TextureRect>("SelectionCursor");
+        scrollBar = GetNode<Panel>("ScrollBar");
+        scrollBarMain = scrollBar.GetNode<Panel>("Main");
+        scrollBarMainTop = scrollBarMain.GetNode<TextureRect>("Top");
+        scrollBarMainMiddle = scrollBarMain.GetNode<TextureRect>("Middle");
+        scrollBarMainBottom = scrollBarMain.GetNode<TextureRect>("Bottom");
+        scrollBarBackground = scrollBar.GetNode<Panel>("Background");
+        scrollBarBackgroundTop = scrollBarBackground.GetNode<TextureRect>("Top");
+        scrollBarBackgroundMiddle = scrollBarBackground.GetNode<TextureRect>("Middle");
+        scrollBarBackgroundBottom = scrollBarBackground.GetNode<TextureRect>("Bottom");
 
         MouseExited += () => { toggleSelectionCursor(false); };
-		
+        SkinManager.Instance.OnLoaded += updateSkin;
+
+        updateSkin();
+
         // temporary until db is implemented
         // also a memory leak every time you reload the menu
         foreach (string path in Directory.GetFiles($"{Constants.USER_FOLDER}/maps"))
@@ -69,7 +88,7 @@ public partial class MapList : Panel
 
 		if (MouseScroll)
 		{
-            float t = Mathf.InverseLerp(Position.Y + scrollBar.Size.Y / 2, Position.Y + Size.Y - scrollBar.Size.Y / 2, GetViewport().GetMousePosition().Y);
+            float t = Mathf.InverseLerp(Position.Y + scrollBarMain.Size.Y / 2, Position.Y + Size.Y - scrollBarMain.Size.Y / 2, GetViewport().GetMousePosition().Y);
             TargetScroll = Mathf.Lerp(TargetScroll, ScrollLength * Math.Clamp(t, 0, 1), Math.Min(1, 24 * delta));
         }
 		else
@@ -79,8 +98,8 @@ public partial class MapList : Panel
 
         Scroll = Mathf.Lerp(Scroll, TargetScroll, Math.Min(1, 20 * delta));
 
-        scrollBar.AnchorTop = (float)Math.Max(0, (TargetScroll - scrollElasticOffset) / (ScrollLength + Size.Y));
-        scrollBar.AnchorBottom = (float)Math.Min(1, scrollBar.AnchorTop + Size.Y / (ScrollLength + Size.Y));
+        scrollBarMain.AnchorTop = (float)Math.Max(0, (TargetScroll - scrollElasticOffset) / (ScrollLength + Size.Y));
+        scrollBarMain.AnchorBottom = (float)Math.Min(1, scrollBarMain.AnchorTop + Size.Y / (ScrollLength + Size.Y));
 
         List<MapButton> drawnButtons = [];
         List<float> buttonSizeOffsets = [];
@@ -239,5 +258,17 @@ public partial class MapList : Panel
 
         Tween tween = CreateTween().SetTrans(Tween.TransitionType.Quad).SetParallel();
         tween.TweenProperty(selectionCursor, "modulate", Color.Color8(255, 255, 255, (byte)(display ? 255 : 0)), 0.1);
+    }
+
+    private void updateSkin()
+    {
+        mask.Texture = SkinManager.Instance.Skin.MapListMaskImage;
+        selectionCursor.Texture = SkinManager.Instance.Skin.MapListSelectionCursorImage;
+        scrollBarMainTop.Texture = SkinManager.Instance.Skin.MapListScrollBarTopImage;
+        scrollBarMainMiddle.Texture = SkinManager.Instance.Skin.MapListScrollBarMiddleImage;
+        scrollBarMainBottom.Texture = SkinManager.Instance.Skin.MapListScrollBarBottomImage;
+        scrollBarBackgroundTop.Texture = SkinManager.Instance.Skin.MapListScrollBarBackgroundTopImage;
+        scrollBarBackgroundMiddle.Texture = SkinManager.Instance.Skin.MapListScrollBarBackgroundMiddleImage;
+        scrollBarBackgroundBottom.Texture = SkinManager.Instance.Skin.MapListScrollBarBackgroundBottomImage;
     }
 }

@@ -57,6 +57,7 @@ public partial class MapButton : Panel
     private RichTextLabel extra;
     private TextureRect cover;
     private Button button;
+    private ShaderMaterial coverMaterial;
 
     public override void _Ready()
     {
@@ -64,6 +65,7 @@ public partial class MapButton : Panel
         title = GetNode<Label>("Title");
         extra = GetNode<RichTextLabel>("Extra");
         cover = GetNode<TextureRect>("Cover");
+        coverMaterial = cover.Material as ShaderMaterial;
 
         Panel outline = GetNode<Panel>("Outline");
 
@@ -76,6 +78,10 @@ public partial class MapButton : Panel
 			Select();
             EmitSignal(SignalName.OnPressed);
         };
+
+        SkinManager.Instance.OnLoaded += updateSkin;
+
+        updateSkin();
     }
 
     public override void _Process(double delta)
@@ -139,4 +145,9 @@ public partial class MapButton : Panel
 	{
 		return (Hovered ? HoverSizeOffset : 0) + (Selected ? SelectedSizeOffset : 0);
 	}
+
+    private void updateSkin()
+    {
+        coverMaterial.Shader = SkinManager.Instance.Skin.MapButtonCoverShader;
+    }
 }
