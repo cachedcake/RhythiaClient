@@ -1,8 +1,8 @@
 [gd_scene load_steps=14 format=3 uid="uid://vgvjvbvu0qsc"]
 
+[ext_resource type="Script" uid="uid://cwdd0qg7m3tnk" path="res://scripts/ui/menu/MapButton.cs" id="1_gpm1h"]
 [ext_resource type="Theme" uid="uid://dhuhu3mmaew1a" path="res://theme/theme.tres" id="1_rhnis"]
 [ext_resource type="Texture2D" uid="uid://cacq7g5ijo7sy" path="res://skin/ui/play/favorite.png" id="2_c1lr1"]
-[ext_resource type="Script" uid="uid://b47sml6mwm4p0" path="res://scripts/ui/menu/MapButton.gd" id="2_ud221"]
 [ext_resource type="Shader" uid="uid://rngh60dyh10b" path="res://scripts/shaders/map_button.gdshader" id="3_b5pxb"]
 [ext_resource type="Shader" uid="uid://b38n4irr1f443" path="res://skin/ui/play/map_button_cover.gdshader" id="3_boybo"]
 [ext_resource type="Texture2D" uid="uid://dqr46iek4sfxo" path="res://textures/p.png" id="3_ud221"]
@@ -53,13 +53,13 @@ shader = ExtResource("7_gpm1h")
 self_modulate = Color(0, 0, 0, 0.8784314)
 clip_contents = true
 custom_minimum_size = Vector2(0, 100)
-anchors_preset = -1
+anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 80.0
 grow_horizontal = 0
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_gpm1h")
-script = ExtResource("2_ud221")
+script = ExtResource("1_gpm1h")
 
 [node name="Background" type="ColorRect" parent="."]
 visible = false

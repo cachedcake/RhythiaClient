@@ -16,7 +16,7 @@ public partial class SettingsManager : Node
     public SettingsProfile Settings { get; private set; } = new SettingsProfile();
 
     [Signal]
-    public delegate void OnShownEventHandler();
+    public delegate void OnShownEventHandler(bool shown);
 
     public override void _Ready()
     {

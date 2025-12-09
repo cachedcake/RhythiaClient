@@ -82,7 +82,7 @@ public partial class SoundManager : Node
 
         if (SceneManager.Scene.Name == "SceneMenu")
         {
-            MainMenu.Control.GetNode("Jukebox").GetNode<Label>("Title").Text = Map.PrettyTitle;
+            LegacyMainMenu.Control.GetNode("Jukebox").GetNode<Label>("Title").Text = Map.PrettyTitle;
         }
 
         Song.Stream = Lib.Audio.LoadStream(Map.AudioBuffer);
