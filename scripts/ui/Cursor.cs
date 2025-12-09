@@ -6,7 +6,7 @@ public partial class Cursor : TextureRect
     public override void _Ready()
     {
         SkinManager.Instance.OnLoaded += UpdateTexture;
-        SettingsManager.Instance.Settings.FieldUpdated += (field, value) => { if (field == "CursorScale") { UpdateSize(); } };
+        // SettingsManager.Instance.Settings.FieldUpdated += (field, value) => { if (field == "CursorScale") { UpdateSize(); } };
 
         UpdateTexture();
         UpdateSize();

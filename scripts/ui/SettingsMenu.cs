@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class Settings : ColorRect
+public partial class SettingsMenu : ColorRect
 {
     public bool Shown = false;
 
@@ -22,26 +22,26 @@ public partial class Settings : ColorRect
         selectedCategory = categories.GetNode<ScrollContainer>("Gameplay");
 
         SettingsManager.Instance.OnShown += ShowMenu;
-        SettingsManager.Instance.Settings.FieldUpdated += (string field, Variant value) => {
-            Panel panel = settingPanels[field];
+        // SettingsManager.Instance.Settings.FieldUpdated += (string field, Variant value) => {
+        //     Panel panel = settingPanels[field];
 
-            HSlider slider = (HSlider)panel?.FindChild("HSlider", false);
-            LineEdit lineEdit = (LineEdit)panel?.FindChild("LineEdit", false);
-            CheckButton toggle = (CheckButton)panel?.FindChild("CheckButton", false);
+        //     HSlider slider = (HSlider)panel?.FindChild("HSlider", false);
+        //     LineEdit lineEdit = (LineEdit)panel?.FindChild("LineEdit", false);
+        //     CheckButton toggle = (CheckButton)panel?.FindChild("CheckButton", false);
 
-            if (slider != null)
-			{
-				updateSlider(slider, lineEdit, (double)value);
-			}
-			else if (toggle != null)
-			{
-				updateToggle(toggle, (bool)value);
-			}
-        };
+        //     if (slider != null)
+		// 	{
+		// 		updateSlider(slider, lineEdit, (double)value);
+		// 	}
+		// 	else if (toggle != null)
+		// 	{
+		// 		updateToggle(toggle, (bool)value);
+		// 	}
+        // };
 
         ShowMenu(false);
 
-        deselect.Pressed += () => { SettingsManager.ShowMenu(false); };
+        deselect.Pressed += () => { ShowMenu(false); };
 		
 		foreach (ColorRect buttonHolder in sidebar.GetChildren())
 		{
@@ -61,22 +61,22 @@ public partial class Settings : ColorRect
 
                 settingPanels[field] = panel;
 
-                Variant value = SettingsManager.Instance.Settings.Get(field);
+                // Variant value = SettingsManager.Instance.Settings.Get(field);
 
-                HSlider slider = (HSlider)panel.FindChild("HSlider", false);
-				LineEdit lineEdit = (LineEdit)panel.FindChild("LineEdit", false);
-				CheckButton toggle = (CheckButton)panel.FindChild("CheckButton", false);
+                // HSlider slider = (HSlider)panel.FindChild("HSlider", false);
+				// LineEdit lineEdit = (LineEdit)panel.FindChild("LineEdit", false);
+				// CheckButton toggle = (CheckButton)panel.FindChild("CheckButton", false);
 
-				if (slider != null)
-				{
-                    setupSlider(field, slider, lineEdit);
-                    updateSlider(slider, lineEdit, (double)value);
-                }
-				else if (toggle != null)
-				{
-                    setupToggle(field, toggle);
-                    updateToggle(toggle, (bool)value);
-                }
+				// if (slider != null)
+				// {
+                //     setupSlider(field, slider, lineEdit);
+                //     updateSlider(slider, lineEdit, (double)value);
+                // }
+				// else if (toggle != null)
+				// {
+                //     setupToggle(field, toggle);
+                //     updateToggle(toggle, (bool)value);
+                // }
             }
 		}
     }

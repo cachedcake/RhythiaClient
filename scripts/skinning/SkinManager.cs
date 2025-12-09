@@ -35,10 +35,12 @@ public partial class SkinManager : Node
 
 	public static void Load()
 	{
-		var settings = SettingsManager.Instance.Settings;
+        var settings = SettingsManager.Instance.Settings;
         var skin = Instance.Skin;
 
-		skin.RawColors = File.ReadAllText($"{Constants.USER_FOLDER}/skins/{settings.Skin}/colors.txt").TrimSuffix(",");
+		// Colors
+
+		skin.RawColors = File.ReadAllText($"{Constants.USER_FOLDER}/skins/{settings.Skin.Value}/colors.txt").TrimSuffix(",");
 
 		string[] split = skin.RawColors.Split(",");
 		Color[] colors = new Color[split.Length];
@@ -52,50 +54,98 @@ public partial class SkinManager : Node
 
 		skin.Colors = colors;
 
-		foreach (PropertyInfo property in typeof(SkinProfile).GetProperties())
-		{
-			if (!property.Name.Contains("Image"))
-			{
-				continue;
-			}
+        // Textures
 
-			property.SetValue(skin, ImageTexture.CreateFromImage(Image.LoadFromFile($"{Constants.USER_FOLDER}/skins/{settings.Skin}/{property.Name.TrimSuffix("Image").ToSnakeCase()}.png")));
-		}
+        skin.CursorImage = loadTexture("game/cursor.png");
+        skin.GridImage = loadTexture("game/grid.png");
+        skin.PanelLeftBackgroundImage = loadTexture("game/panel_left_background.png");
+		skin.PanelRightBackgroundImage = loadTexture("game/panel_right_background.png");
+        skin.HealthImage = loadTexture("game/health.png");
+		skin.HealthBackgroundImage = loadTexture("game/health_background.png");
+		skin.ProgressImage = loadTexture("game/progress.png");
+		skin.ProgressBackgroundImage = loadTexture("game/progress_background.png");
+		skin.HitsImage = loadTexture("game/hits.png");
+		skin.MissesImage = loadTexture("game/misses.png");
+		skin.MissFeedbackImage = loadTexture("game/miss_feedback.png");
 
-		skin.GameSpaceName = File.ReadAllText($"{Constants.USER_FOLDER}/skins/{settings.Skin}/space.txt");
-        bool exists = Godot.FileAccess.FileExists($"res://prefabs/spaces/{skin.GameSpaceName}.tscn");
-        skin.GameSpace = GD.Load<PackedScene>($"res://prefabs/spaces/{(exists ? skin.GameSpaceName : "void")}.tscn").Instantiate<Node3D>();
+		skin.JukeboxPlayImage = loadTexture("ui/jukebox_play.png");
+		skin.JukeboxPauseImage = loadTexture("ui/jukebox_pause.png");
+		skin.JukeboxSkipImage = loadTexture("ui/jukebox_skip.png");
+
+		skin.FavoriteImage = loadTexture("ui/play/favorite.png");
+
+		skin.ModNofailImage = loadTexture("modifiers/nofail.png");
+		skin.ModSpinImage = loadTexture("modifiers/spin.png");
+		skin.ModGhostImage = loadTexture("modifiers/ghost.png");
+		skin.ModChaosImage = loadTexture("modifiers/chaos.png");
+		skin.ModFlashlightImage = loadTexture("modifiers/flashlight.png");
+		skin.ModHardrockImage = loadTexture("modifiers/hardrock.png");
+		
+        // Sounds
+
+        skin.HitSoundBuffer = loadSound("hit.mp3");
+        skin.FailSoundBuffer = loadSound("fail.mp3");
+
+        // Meshes
+
+        skin.NoteMesh = loadMesh("note.obj");
+
+		// Spaces
+
+		skin.GameSpaceName = File.ReadAllText($"{Constants.USER_FOLDER}/skins/{settings.Skin.Value}/space.txt");
+        skin.GameSpace = loadSpace(skin.GameSpaceName);
 
         skin.MenuSpaceName = "waves";
-		exists = Godot.FileAccess.FileExists($"res://prefabs/spaces/{skin.MenuSpaceName}.tscn");
-		skin.MenuSpace = GD.Load<PackedScene>($"res://prefabs/spaces/{(exists ? skin.MenuSpaceName : "void")}.tscn").Instantiate<Node3D>();
+		skin.MenuSpace = loadSpace(skin.MenuSpaceName);
 
-        if (File.Exists($"{Constants.USER_FOLDER}/skins/{settings.Skin}/note.obj"))
+		//
+
+		ToastNotification.Notify($"Loaded skin [{settings.Skin.Value}]");
+		Logger.Log($"Loaded skin {settings.Skin.Value}");
+
+		Instance.EmitSignal(SignalName.OnLoaded);
+	}
+
+	private static ImageTexture loadTexture(string skinPath)
+	{
+		var settings = SettingsManager.Instance.Settings;
+		return ImageTexture.CreateFromImage(Image.LoadFromFile($"{Constants.USER_FOLDER}/skins/{settings.Skin.Value}/{skinPath}"));
+	}
+
+	private static byte[] loadSound(string skinPath)
+	{
+		var settings = SettingsManager.Instance.Settings;
+		string path = $"{Constants.USER_FOLDER}/skins/{settings.Skin.Value}/{skinPath}";
+		byte[] buffer = [];
+
+		if (File.Exists(path))
 		{
-			skin.NoteMesh = (ArrayMesh)Util.Misc.OBJParser.Call("load_obj", $"{Constants.USER_FOLDER}/skins/{settings.Skin}/note.obj");
+			Godot.FileAccess file = Godot.FileAccess.Open(path, Godot.FileAccess.ModeFlags.Read);
+			buffer = file.GetBuffer((long)file.GetLength());
+			file.Close();
+		}
+
+		return buffer;
+	}
+
+	private static ArrayMesh loadMesh(string skinPath)
+	{
+		var settings = SettingsManager.Instance.Settings;
+		if (File.Exists($"{Constants.USER_FOLDER}/skins/{settings.Skin.Value}/{skinPath}"))
+		{
+			return (ArrayMesh)Util.Misc.OBJParser.Call("load_obj", $"{Constants.USER_FOLDER}/skins/{settings.Skin.Value}/{skinPath}");
 		}
 		else
 		{
-			skin.NoteMesh = GD.Load<ArrayMesh>($"res://skin/note.obj");
+			return GD.Load<ArrayMesh>($"res://skin/note.obj");
 		}
+	}
 
-		if (File.Exists($"{Constants.USER_FOLDER}/skins/{settings.Skin}/hit.mp3"))
-		{
-			Godot.FileAccess file = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/skins/{settings.Skin}/hit.mp3", Godot.FileAccess.ModeFlags.Read);
-			skin.HitSoundBuffer = file.GetBuffer((long)file.GetLength());
-			file.Close();
-		}
-
-		if (File.Exists($"{Constants.USER_FOLDER}/skins/{settings.Skin}/fail.mp3"))
-		{
-			Godot.FileAccess file = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/skins/{settings.Skin}/fail.mp3", Godot.FileAccess.ModeFlags.Read);
-			skin.FailSoundBuffer = file.GetBuffer((long)file.GetLength());
-			file.Close();
-		}
-
-		ToastNotification.Notify($"Loaded skin [{settings.Skin}]");
-		Logger.Log($"Loaded skin {settings.Skin}");
-
-		Instance.EmitSignal(SignalName.OnLoaded);
+	private static Node3D loadSpace(string space)
+	{
+		var settings = SettingsManager.Instance.Settings;
+		bool exists = Godot.FileAccess.FileExists($"res://prefabs/spaces/{space}.tscn");
+		
+		return GD.Load<PackedScene>($"res://prefabs/spaces/{(exists ? space : "void")}.tscn").Instantiate<Node3D>();
 	}
 }

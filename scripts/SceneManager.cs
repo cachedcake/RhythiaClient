@@ -106,7 +106,7 @@ public partial class SceneManager : Node
 
             // temp solution until the game scene is non-static
             backgroundViewport.TransparentBg = node.Name != "SceneMenu";
-
+            
             backgroundViewport.AddChild(space);
         }
 

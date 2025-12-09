@@ -8,7 +8,7 @@
 [ext_resource type="Theme" uid="uid://dhuhu3mmaew1a" path="res://theme/theme.tres" id="6_engjn"]
 [ext_resource type="FontFile" uid="uid://bopde8iqsld1o" path="res://fonts/Ubuntu-Regular.ttf" id="7_6h3lr"]
 [ext_resource type="StyleBox" uid="uid://bfimbyi3x5h0n" path="res://theme/line_edit_stylebox_normal.tres" id="8_dj67d"]
-[ext_resource type="Script" uid="uid://bnead3awk7yr4" path="res://scripts/ui/menu/SettingsButton.cs" id="8_yxnar"]
+[ext_resource type="Script" uid="uid://bnead3awk7yr4" path="res://scripts/ui/menu/SettingsMenuButton.cs" id="8_yxnar"]
 [ext_resource type="Script" uid="uid://byighsqkmf2c4" path="res://scripts/ui/menu/QuitButton.cs" id="9_yxnar"]
 [ext_resource type="Texture2D" uid="uid://cbbafomdyoenp" path="res://skin/ui/play/background_tile.png" id="10_jvjdd"]
 [ext_resource type="Shader" uid="uid://dgoi2tf33xnmj" path="res://skin/ui/play/background_tile.gdshader" id="10_yxnar"]

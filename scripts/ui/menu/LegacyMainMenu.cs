@@ -305,7 +305,7 @@ public partial class LegacyMainMenu : Control
 						value = Util.String.PadMagnitude(Stats.HighestScore.ToString());
 						break;
 					case "TotalScore":
-						value = Util.String.PadMagnitude(Stats.TotalScore.ToString());
+						value = Util.String.PadMagnitude(Stats.Total_Score.ToString());
 						break;
 					case "AverageAccuracy":
 						double sum = 0;

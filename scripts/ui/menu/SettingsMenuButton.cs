@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class SettingsButton : Button
+public partial class SettingsMenuButton : Button
 {
     public override void _Pressed()
     {

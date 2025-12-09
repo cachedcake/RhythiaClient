@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Godot;
+using Godot.NativeInterop;
 using LiteDB;
 
 public partial class Rhythia : Node
 {
-    private static bool initialized = false;
     private static bool loaded = false;
+    private static string[] userDirectories = ["cache", "maps", "profiles", "skins", "replays", "pbs"];
 
     private DatabaseService databaseService = DatabaseService.Instance;
 
@@ -16,32 +17,25 @@ public partial class Rhythia : Node
     public override void _Ready()
     {
         GetTree().AutoAcceptQuit = false;
-        
-        Setup();
-    }
 
-    public static void Setup()
-    {
-        if (initialized)
-        {
-            return;
-        }
-
-        initialized = true;
+        // Set up user folder
 
         if (!File.Exists($"{Constants.USER_FOLDER}/favorites.txt"))
         {
             File.WriteAllText($"{Constants.USER_FOLDER}/favorites.txt", "");
         }
 
-        if (!Directory.Exists($"{Constants.USER_FOLDER}/cache"))
+        if (!File.Exists($"{Constants.USER_FOLDER}/current_profile.txt"))
         {
-            Directory.CreateDirectory($"{Constants.USER_FOLDER}/cache");
+            File.WriteAllText($"{Constants.USER_FOLDER}/current_profile.txt", "default");
         }
 
-        if (!Directory.Exists($"{Constants.USER_FOLDER}/cache/maps"))
+        foreach (string folder in userDirectories)
         {
-            Directory.CreateDirectory($"{Constants.USER_FOLDER}/cache/maps");
+            if (!Directory.Exists($"{Constants.USER_FOLDER}/{folder}"))
+            {
+                Directory.CreateDirectory($"{Constants.USER_FOLDER}/{folder}");
+            }
         }
 
         foreach (string cacheFile in Directory.GetFiles($"{Constants.USER_FOLDER}/cache"))
@@ -49,14 +43,9 @@ public partial class Rhythia : Node
             File.Delete(cacheFile);
         }
 
-        for (int i = 0; i < Util.Misc.UserDirectories.Length; i++)
+        if (!Directory.Exists($"{Constants.USER_FOLDER}/cache/maps"))
         {
-            string Folder = Util.Misc.UserDirectories[i];
-
-            if (!Directory.Exists($"{Constants.USER_FOLDER}/{Folder}"))
-            {
-                Directory.CreateDirectory($"{Constants.USER_FOLDER}/{Folder}");
-            }
+            Directory.CreateDirectory($"{Constants.USER_FOLDER}/cache/maps");
         }
 
         if (!Directory.Exists($"{Constants.USER_FOLDER}/skins/default"))
@@ -64,51 +53,45 @@ public partial class Rhythia : Node
             Directory.CreateDirectory($"{Constants.USER_FOLDER}/skins/default");
         }
 
-        foreach (string skinFile in Util.Misc.SkinFiles)
+        // Skin
+
+        void deepCopy(string resDir)
         {
-            try
+            string userDir = $"{Constants.USER_FOLDER}/skins/default{resDir.TrimPrefix("skin")}";
+
+            if (!Directory.Exists(userDir))
             {
-                byte[] buffer = [];
+                Directory.CreateDirectory(userDir);
+            }
 
-                if (skinFile.GetExtension() == "txt")
-                {
-                    Godot.FileAccess file = Godot.FileAccess.Open($"res://skin/{skinFile}", Godot.FileAccess.ModeFlags.Read);
-                    buffer = file.GetBuffer((long)file.GetLength());
-                }
-                else
-                {
-                    var source = ResourceLoader.Load($"res://skin/{skinFile}");
+            foreach (string resFile in Godot.DirAccess.GetFilesAt($"res://{resDir}"))
+            {
+                string userFile = $"{userDir}/{resFile}";
+                string ext = resFile.GetExtension();
 
-                    switch (source.GetType().Name)
-                    {
-                        case "CompressedTexture2D":
-                            buffer = (source as CompressedTexture2D).GetImage().SavePngToBuffer();
-                            break;
-                        case "AudioStreamMP3":
-                            buffer = (source as AudioStreamMP3).Data;
-                            break;
-                    }
-                }
-
-                if (buffer.Length == 0)
+                if (ext == "import" || ext == "uid" || File.Exists(userFile))
                 {
                     continue;
                 }
 
-                Godot.FileAccess target = Godot.FileAccess.Open($"{Constants.USER_FOLDER}/skins/default/{skinFile}", Godot.FileAccess.ModeFlags.Write);
-                target.StoreBuffer(buffer);
-                target.Close();
+                Godot.FileAccess source = Godot.FileAccess.Open($"res://{resDir}/{resFile}", Godot.FileAccess.ModeFlags.Read);
+                byte[] buffer = source.GetBuffer((long)source.GetLength());
+                source.Close();
+
+                Godot.FileAccess copy = Godot.FileAccess.Open(userFile, Godot.FileAccess.ModeFlags.Write);
+                copy.StoreBuffer(buffer);
+                copy.Close();
             }
-            catch (Exception exception)
+
+            foreach (string dir in Godot.DirAccess.GetDirectoriesAt($"res://{resDir}"))
             {
-                Logger.Log($"Couldn't copy default skin file {skinFile}; {exception}");
+                deepCopy($"{resDir}/{dir}");
             }
         }
 
-        if (!File.Exists($"{Constants.USER_FOLDER}/current_profile.txt"))
-        {
-            File.WriteAllText($"{Constants.USER_FOLDER}/current_profile.txt", "default");
-        }
+        deepCopy("skin");
+
+        // Settings
 
         if (!File.Exists($"{Constants.USER_FOLDER}/profiles/default.json"))
         {
@@ -123,6 +106,8 @@ public partial class Rhythia : Node
         {
             SettingsManager.Save();
         }
+
+        // Stats
 
         if (!File.Exists($"{Constants.USER_FOLDER}/stats"))
         {
@@ -156,7 +141,6 @@ public partial class Rhythia : Node
             Stats.Save();
         }
 
-        // SettingsManager.UpdateSettings();
         Stats.GamesOpened++;
 
         List<string> import = [];
@@ -170,6 +154,11 @@ public partial class Rhythia : Node
         }
 
         MapParser.BulkImport([.. import]);
+
+        foreach (string file in import)
+        {
+            File.Delete(file);
+        }
 
         loaded = true;
     }
@@ -234,6 +223,4 @@ public partial class Rhythia : Node
             Quit();
         }
     }
-
-
 }
