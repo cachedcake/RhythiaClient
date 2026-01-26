@@ -25,7 +25,7 @@ public partial class Rhythia : Node
         GetTree().AutoAcceptQuit = false;
 
         // Set up user folder
-
+        
         static void deepCopy(string resDir = "")
         {
             string userDir = $"{Constants.USER_FOLDER}{resDir}";

@@ -93,6 +93,8 @@ public partial class JukeboxPanel : Panel, ISkinnable
 	public void UpdateMap(Map map)
 	{
         title.Text = map.PrettyTitle;
+
+        pauseButton.TextureNormal = SkinManager.Instance.Skin.JukeboxPauseImage;
     }
 
     public void UpdateSkin(SkinProfile skin = null)
@@ -132,6 +134,6 @@ public partial class JukeboxPanel : Panel, ISkinnable
 
     private void select()
     {
-        
+
     }
 }

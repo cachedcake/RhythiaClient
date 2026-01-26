@@ -131,7 +131,11 @@ public partial class MapInfoContainer : Panel, ISkinnable
             value = Math.Clamp(value, 25, 1000) / 100;
 
             Lobby.SetSpeed(value);
-            SoundManager.PlayJukebox(Map);
+            
+            if (SoundManager.Map.ID != Map.ID)
+            {
+                SoundManager.PlayJukebox(Map);
+            }
         }
 
         speedEdit.FocusExited += applySpeed;
@@ -188,7 +192,11 @@ public partial class MapInfoContainer : Panel, ISkinnable
             value = Math.Clamp(value * 1000, 0, Map.Length);
 
             Lobby.SetStartFrom(value);
-            SoundManager.PlayJukebox(Map);
+            
+            if (SoundManager.Map.ID != Map.ID)
+            {
+                SoundManager.PlayJukebox(Map);
+            }
             
             if (seek)
             {

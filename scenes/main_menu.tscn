@@ -1,4 +1,4 @@
-[gd_scene load_steps=100 format=3 uid="uid://do18270a428ma"]
+[gd_scene load_steps=99 format=3 uid="uid://do18270a428ma"]
 
 [ext_resource type="Shader" uid="uid://c7ldko1kfg2ho" path="res://scripts/shaders/noise_waves.gdshader" id="1_3wgol"]
 [ext_resource type="Script" uid="uid://j2paynyu362u" path="res://scripts/scenes/MainMenu.cs" id="1_yxnar"]
@@ -212,9 +212,6 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ooiyf"]
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hl5e0"]
-load_path = "res://.godot/imported/background_tile.png-4c6063608cf4e867f53ff9bb9cf422f3.ctex"
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u43bj"]
 
@@ -978,7 +975,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = SubResource("CompressedTexture2D_hl5e0")
+texture = ExtResource("10_ybca7")
 expand_mode = 1
 stretch_mode = 1
 

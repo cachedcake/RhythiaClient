@@ -1246,7 +1246,7 @@ public partial class LegacyRunner : BaseScene
 				
 				Leaderboard leaderboard = new(CurrentAttempt.Map.ID, $"{Constants.USER_FOLDER}/pbs/{CurrentAttempt.Map.ID}");
 				
-				leaderboard.Add(new(CurrentAttempt.ID, "You", CurrentAttempt.Qualifies, CurrentAttempt.Score, CurrentAttempt.Accuracy, Time.GetUnixTimeFromSystem(), CurrentAttempt.Map.Length, CurrentAttempt.Map.Length, CurrentAttempt.Speed, CurrentAttempt.Mods));
+				leaderboard.Add(new(CurrentAttempt.ID, "You", CurrentAttempt.Qualifies, CurrentAttempt.Score, CurrentAttempt.Accuracy, Time.GetUnixTimeFromSystem(), CurrentAttempt.Progress, CurrentAttempt.Map.Length, CurrentAttempt.Speed, CurrentAttempt.Mods));
 				leaderboard.Save();
 				
 				if (CurrentAttempt.Qualifies)
