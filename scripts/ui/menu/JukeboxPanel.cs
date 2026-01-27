@@ -105,7 +105,7 @@ public partial class JukeboxPanel : Panel, ISkinnable
     {
         skin ??= SkinManager.Instance.Skin;
 
-        pauseButton.TextureNormal = SoundManager.Song.StreamPaused ? skin.JukeboxPlayImage : skin.JukeboxPauseImage;
+        pauseButton.TextureNormal = SoundManager.Song.Playing ? skin.JukeboxPauseImage : skin.JukeboxPlayImage;
         skipButton.TextureNormal = skin.JukeboxSkipImage;
         rewindButton.TextureNormal = skin.JukeboxSkipImage;
     }
@@ -113,8 +113,8 @@ public partial class JukeboxPanel : Panel, ISkinnable
     private void pause()
     {
         var skin = SkinManager.Instance.Skin;
-        SoundManager.Song.StreamPaused = !SoundManager.Song.StreamPaused;
-        pauseButton.TextureNormal = SoundManager.Song.StreamPaused ? skin.JukeboxPlayImage : skin.JukeboxPauseImage;
+        SoundManager.Song.Playing = !SoundManager.Song.Playing;
+        pauseButton.TextureNormal = SoundManager.Song.Playing ? skin.JukeboxPauseImage : skin.JukeboxPlayImage;
     }
 
     private void skip()

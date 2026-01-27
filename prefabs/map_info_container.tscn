@@ -455,96 +455,9 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("4_4d08m")
 
-[node name="Holder" type="Panel" parent="Actions/ScrollContainer/Holder/Preview/AspectRatioContainer" unique_id=1598782161]
+[node name="FlatPreview" type="Panel" parent="Actions/ScrollContainer/Holder/Preview/AspectRatioContainer" unique_id=1598782161]
 layout_mode = 2
 script = ExtResource("5_svokg")
-
-[node name="1" type="ColorRect" parent="Actions/ScrollContainer/Holder/Preview/AspectRatioContainer/Holder" unique_id=562728334]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 0.333
-anchor_bottom = 0.333
-color = Color(1, 1, 1, 0)
-
-[node name="2" type="ColorRect" parent="Actions/ScrollContainer/Holder/Preview/AspectRatioContainer/Holder" unique_id=733342675]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.333
-anchor_right = 0.667
-anchor_bottom = 0.333
-grow_horizontal = 2
-color = Color(1, 1, 1, 0)
-
-[node name="3" type="ColorRect" parent="Actions/ScrollContainer/Holder/Preview/AspectRatioContainer/Holder" unique_id=2053544456]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.667
-anchor_right = 1.0
-anchor_bottom = 0.333
-grow_horizontal = 0
-color = Color(1, 1, 1, 0)
-
-[node name="4" type="ColorRect" parent="Actions/ScrollContainer/Holder/Preview/AspectRatioContainer/Holder" unique_id=1590998412]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.333
-anchor_right = 0.333
-anchor_bottom = 0.667
-grow_vertical = 2
-color = Color(1, 1, 1, 0)
-
-[node name="5" type="ColorRect" parent="Actions/ScrollContainer/Holder/Preview/AspectRatioContainer/Holder" unique_id=1130565983]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.333
-anchor_top = 0.333
-anchor_right = 0.667
-anchor_bottom = 0.667
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(1, 1, 1, 0)
-
-[node name="6" type="ColorRect" parent="Actions/ScrollContainer/Holder/Preview/AspectRatioContainer/Holder" unique_id=2066840617]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.667
-anchor_top = 0.333
-anchor_right = 1.0
-anchor_bottom = 0.667
-grow_horizontal = 0
-grow_vertical = 2
-color = Color(1, 1, 1, 0)
-
-[node name="7" type="ColorRect" parent="Actions/ScrollContainer/Holder/Preview/AspectRatioContainer/Holder" unique_id=135044858]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.667
-anchor_right = 0.333
-anchor_bottom = 1.0
-grow_vertical = 0
-color = Color(1, 1, 1, 0)
-
-[node name="8" type="ColorRect" parent="Actions/ScrollContainer/Holder/Preview/AspectRatioContainer/Holder" unique_id=1430838102]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.333
-anchor_top = 0.667
-anchor_right = 0.667
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 0
-color = Color(1, 1, 1, 0)
-
-[node name="9" type="ColorRect" parent="Actions/ScrollContainer/Holder/Preview/AspectRatioContainer/Holder" unique_id=597316659]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.667
-anchor_top = 0.667
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 0
-grow_vertical = 0
-color = Color(1, 1, 1, 0)
 
 [node name="Modes" type="Panel" parent="Actions/ScrollContainer/Holder" unique_id=61555324]
 layout_mode = 1

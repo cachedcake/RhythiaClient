@@ -18,8 +18,11 @@ public partial class MapInfoContainer : Panel, ISkinnable
     private TextureRect cover;
     private Panel infoSubholder;
     private RichTextLabel mainLabel;
+    private string mainLabelFormat;
     private RichTextLabel extraLabel;
+    private string extraLabelFormat;
     private LinkPopupButton artistLink;
+    private string artistLinkFormat;
 
     private Panel actions;
     private Panel previewHolder;
@@ -47,10 +50,13 @@ public partial class MapInfoContainer : Panel, ISkinnable
 
         coverBackground = infoHolder.GetNode("CoverContainer").GetNode<TextureRect>("Background");
         cover = coverBackground.GetNode<TextureRect>("Cover");
-        artistLink = coverBackground.GetNode<LinkPopupButton>("ArtistLink");
         infoSubholder = infoHolder.GetNode<Panel>("Subholder");
         mainLabel = infoSubholder.GetNode<RichTextLabel>("MainLabel");
+        mainLabelFormat = mainLabel.Text;
         extraLabel = infoSubholder.GetNode<RichTextLabel>("Extra");
+        extraLabelFormat = extraLabel.Text;
+        artistLink = coverBackground.GetNode<LinkPopupButton>("ArtistLink");
+        artistLinkFormat = artistLink.Text;
 
         void updateOffset() { infoSubholder.OffsetLeft = coverBackground.Size.X + 8; }
 
@@ -142,7 +148,6 @@ public partial class MapInfoContainer : Panel, ISkinnable
             startButton.Text = $"START{(startFrom > 0 ? $" ({startFromEdit.Text})" : "")}";
         }
 
-        Lobby.SetStartFrom(0);
         Lobby.Instance.StartFromChanged += displayStartFrom;
 
         void applyStartFrom(string input = null, bool seek = true)
@@ -181,7 +186,7 @@ public partial class MapInfoContainer : Panel, ISkinnable
             
             if (seek)
             {
-                SoundManager.Song.Seek((float)Lobby.StartFrom / 1000);
+                SoundManager.Song.Play((float)Lobby.StartFrom / 1000);
             }
         }
 
@@ -278,16 +283,19 @@ public partial class MapInfoContainer : Panel, ISkinnable
 
         // Info
 
-        mainLabel.Text = string.Format(mainLabel.Text, map.PrettyTitle, Constants.DIFFICULTY_COLORS[map.Difficulty].ToHtml(), map.DifficultyName, map.PrettyMappers);
-        extraLabel.Text = string.Format(extraLabel.Text, Util.String.FormatTime(map.Length / 1000), map.Notes.Length, map.ID);
+        mainLabel.Text = string.Format(mainLabelFormat, map.PrettyTitle, Constants.DIFFICULTY_COLORS[map.Difficulty].ToHtml(), map.DifficultyName, map.PrettyMappers);
+        extraLabel.Text = string.Format(extraLabelFormat, Util.String.FormatTime(map.Length / 1000), map.Notes.Length, map.ID);
         coverBackground.SelfModulate = Constants.DIFFICULTY_COLORS[map.Difficulty];
         artistLink.Visible = map.ArtistLink != "";
-        artistLink.Text = string.Format(artistLink.Text, map.ArtistPlatform);
+        artistLink.Text = string.Format(artistLinkFormat, map.ArtistPlatform);
 
         artistLink.UpdateLink(map.ArtistLink);
 
         // Actions
 
+        Lobby.SetStartFrom(0);
+
+        previewHolder.GetNode("AspectRatioContainer").GetNode<FlatPreview>("FlatPreview").Setup(map, true);
 
         // Leaderboard
 

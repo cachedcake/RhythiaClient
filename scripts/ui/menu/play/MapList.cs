@@ -352,6 +352,11 @@ public partial class MapList : Panel, ISkinnable
     public void Focus(Map map)
     {
         TargetScroll = Maps.FindIndex(otherMap => otherMap.ID == map.ID) / buttonsPerContainer * (buttonMinSize + Spacing) + buttonMinSize / 2 - Size.Y / 2;
+
+        if (SceneManager.Scene is MainMenu mainMenu)
+        {
+            mainMenu.Transition(mainMenu.PlayMenu);
+        }
     }
 
     public void UpdateMaps(string search = "", string author = "")

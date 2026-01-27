@@ -83,6 +83,7 @@ public partial class SettingsMenu : ColorRect
 
                 Label title = panel.GetNode<Label>("Title");
                 title.Text = setting.Title;
+                title.TooltipText = setting.Description;
 
                 if (setting.Type == typeof(bool))
                 {

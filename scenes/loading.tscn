@@ -60,6 +60,16 @@ texture = ExtResource("2_yt702")
 expand_mode = 1
 stretch_mode = 5
 
+[node name="Transition" type="ColorRect" parent="." unique_id=472667306]
+self_modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
 [node name="Spectrum" type="Panel" parent="." unique_id=797692806]
 material = SubResource("ShaderMaterial_nxo4k")
 anchors_preset = -1
@@ -81,13 +91,3 @@ BarColor = Color(1, 1, 1, 0.1254902)
 BarSize = 6.0
 BarMinSize = 1.0
 Align = 1.0
-
-[node name="Transition" type="ColorRect" parent="." unique_id=472667306]
-self_modulate = Color(1, 1, 1, 0)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0, 0, 0, 1)
