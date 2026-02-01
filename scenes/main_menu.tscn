@@ -42,6 +42,7 @@
 [ext_resource type="Texture2D" uid="uid://bl6ten82nkjmd" path="res://user/skins/default/ui/buttons/sort.png" id="32_2wgix"]
 [ext_resource type="Texture2D" uid="uid://c6k1k4817che2" path="res://user/skins/default/ui/buttons/author.png" id="33_b56yx"]
 [ext_resource type="Script" uid="uid://b47jydbbjdh3i" path="res://scripts/ui/menu/SoundSpaceButton.cs" id="33_yxnar"]
+[ext_resource type="Script" uid="uid://dtnrcumiy038m" path="res://scripts/ui/menu/play/SearchPanel.cs" id="34_71lbq"]
 [ext_resource type="Texture2D" uid="uid://bg3gjft0mamud" path="res://user/skins/default/ui/buttons/search.png" id="34_h5mb6"]
 [ext_resource type="Script" uid="uid://chb17y8gabhta" path="res://scripts/ui/menu/JukeboxPanel.cs" id="35_jvjdd"]
 [ext_resource type="Script" uid="uid://783e032bf2o3" path="res://scripts/ui/menu/extras/StatsPanel.cs" id="37_wadof"]
@@ -910,6 +911,8 @@ layout_mode = 2
 mouse_filter = 2
 theme = ExtResource("6_engjn")
 theme_override_styles/panel = SubResource("StyleBoxFlat_68b7m")
+script = ExtResource("34_71lbq")
+SearchAuthor = true
 
 [node name="LineEdit" type="LineEdit" parent="Menus/Play/SubTopBar/HBoxContainer/SearchAuthor" unique_id=1225947712]
 custom_minimum_size = Vector2(120, 32)
@@ -950,6 +953,7 @@ layout_mode = 2
 mouse_filter = 2
 theme = ExtResource("6_engjn")
 theme_override_styles/panel = SubResource("StyleBoxFlat_68b7m")
+script = ExtResource("34_71lbq")
 
 [node name="LineEdit" type="LineEdit" parent="Menus/Play/SubTopBar/HBoxContainer/Search" unique_id=325643057]
 custom_minimum_size = Vector2(120, 32)

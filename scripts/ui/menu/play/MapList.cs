@@ -58,6 +58,8 @@ public partial class MapList : Panel, ISkinnable
     public bool DragScroll = false;
     public bool MouseScroll = false;
     public bool DisplaySelectionCursor = false;
+    public string SearchQuery = "";
+    public string AuthorQuery = "";
 
     /// <summary>
     /// Queried and ordered maps to display in the list
@@ -113,9 +115,12 @@ public partial class MapList : Panel, ISkinnable
         Resized += clear;
         SkinManager.Instance.Loaded += UpdateSkin;
         MapParser.Instance.MapsImported += maps => {
+            MapCache.Load(false);
             UpdateMaps();
             Select(maps[0]);
         };
+        MapManager.MapsInitialized += _ => UpdateMaps();
+        MapManager.MapUpdated += _ => UpdateMaps();
 
         Task.Run(() => UpdateMaps());
 
@@ -332,7 +337,7 @@ public partial class MapList : Panel, ISkinnable
         {
             LegacyRunner.Play(Lobby.Map, Lobby.Speed, Lobby.StartFrom, Lobby.Modifiers);
         }
-        
+
         selectedMapID = map.Name;
 
         Focus(map);
@@ -350,13 +355,23 @@ public partial class MapList : Panel, ISkinnable
         }
     }
 
-    public void UpdateMaps(string search = "", string author = "")
+    public void Search(string query = "", string author = "")
+    {
+        SearchQuery = query ?? SearchQuery;
+        AuthorQuery = author ?? AuthorQuery;
+
+        UpdateMaps();
+        clear();
+    }
+
+    public void UpdateMaps()
     {
         Maps.Clear();
 
+        List<Map> queried = [.. MapManager.Maps.Where(x => x.PrettyTitle.Contains(SearchQuery, StringComparison.CurrentCultureIgnoreCase) && x.PrettyMappers.Contains(AuthorQuery, StringComparison.CurrentCultureIgnoreCase))];
         List<Map> unfavorited = [];
 
-        foreach (Map map in MapManager.Maps)
+        foreach (Map map in queried)
 		{
             (map.Favorite ? Maps : unfavorited).Add(map);
         }

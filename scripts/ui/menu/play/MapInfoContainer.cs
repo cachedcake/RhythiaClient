@@ -311,11 +311,16 @@ public partial class MapInfoContainer : Panel, ISkinnable
         extraLabel.Text = string.Format(extraLabelFormat, Util.String.FormatTime(map.Length / 1000), map.Notes.Length, map.Name);
         coverBackground.SelfModulate = Constants.DIFFICULTY_COLORS[map.Difficulty];
         cover.Texture = map.Cover;
+        favoriteButton.Icon = map.Favorite ? SkinManager.Instance.Skin.UnfavoriteButtonImage : SkinManager.Instance.Skin.FavoriteButtonImage;
 
         favoriteButton.Pressed += () =>
         {
             map.Favorite = !map.Favorite;
             MapManager.Update(map);
+
+            var skin = SkinManager.Instance.Skin;
+
+            favoriteButton.Icon = map.Favorite ? skin.UnfavoriteButtonImage : skin.FavoriteButtonImage;
         };
 
         //videoButton.Pressed += () =>
