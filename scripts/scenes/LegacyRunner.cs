@@ -479,10 +479,10 @@ public partial class LegacyRunner : BaseScene
 		cursorTrailMultimesh = holder.GetNode<MultiMeshInstance3D>("CursorTrail");
 		//jesus = GetNode<TextureRect>("Jesus");
 
-		healthTexture = GetNode("HealthViewport").GetNode<TextureRect>("Main");
-		progressBarTexture = GetNode("ProgressBarViewport").GetNode<TextureRect>("Main");
-		panelLeft = GetNode<SubViewport>("PanelLeftViewport");
-		panelRight = GetNode<SubViewport>("PanelRightViewport");
+		healthTexture = holder.GetNode("Health").GetNode("HealthViewport").GetNode<TextureRect>("Main");
+		progressBarTexture = holder.GetNode("ProgressBar").GetNode("ProgressBarViewport").GetNode<TextureRect>("Main");
+		panelLeft = holder.GetNode("PanelLeft").GetNode<SubViewport>("PanelLeftViewport");
+		panelRight = holder.GetNode("PanelRight").GetNode<SubViewport>("PanelRightViewport");
 		//bell = GetNode<AudioStreamPlayer>("Bell");
 		replayViewer = GetNode<Panel>("ReplayViewer");
 		replayViewerPause = replayViewer.GetNode<TextureButton>("Pause");
@@ -497,7 +497,7 @@ public partial class LegacyRunner : BaseScene
 		multiplierLabel = panelLeft.GetNode<Label>("Multiplier");
 		multiplierProgressPanel = panelLeft.GetNode<Panel>("MultiplierProgress");
 		multiplierProgressMaterial = multiplierProgressPanel.Material as ShaderMaterial;
-        video = GetNode("VideoViewport").GetNode<VideoStreamPlayer>("VideoStreamPlayer");
+        video = videoQuad.GetNode("VideoViewport").GetNode<VideoStreamPlayer>("VideoStreamPlayer");
 
         List<string> activeMods = [];
 

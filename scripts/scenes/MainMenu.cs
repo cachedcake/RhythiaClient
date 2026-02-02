@@ -33,7 +33,7 @@ public partial class MainMenu : BaseScene
         Jukebox = GetNode<JukeboxPanel>("JukeboxPanel");
         MapList = PlayMenu.GetNode<MapList>("MapList");
         MapInfo = PlayMenu.GetNode<MapInfo>("MapInfo");
-		
+
         CurrentMenu = HomeMenu;
 
         Input.MouseMode = SettingsManager.Instance.Settings.UseCursorInMenus ? Input.MouseModeEnum.Hidden : Input.MouseModeEnum.Visible;
@@ -44,7 +44,7 @@ public partial class MainMenu : BaseScene
         foreach (Button button in menuButtons)
 		{
 			Panel menu = (Panel)menuHolder.FindChild(button.Name, false);
-			
+
 			if (menu != null)
 			{
 				button.Pressed += () => { Transition(menu); };
@@ -74,12 +74,6 @@ public partial class MainMenu : BaseScene
 		{
 			switch (key.Keycode)
 			{
-				case Key.Space:
-					if (Lobby.Map != null && CurrentMenu == PlayMenu)
-					{
-                        LegacyRunner.Play(Lobby.Map, Lobby.Speed, Lobby.StartFrom, Lobby.Modifiers);
-                    }
-                    break;
 				case Key.Escape:
                     Transition(HomeMenu);
                     break;
