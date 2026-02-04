@@ -29,7 +29,11 @@ public partial class Squircles : BaseSpace
     {
         base._Process(delta);
 
-        if (!Playing)
+        if (Playing)
+        {
+            updateColor(NoteHitColor);
+        }
+        else
 		{
 			Viewport viewport = GetViewport();
 			Vector2 centerOffset = viewport.GetMousePosition() - viewport.GetVisibleRect().Size / 2;
@@ -44,9 +48,9 @@ public partial class Squircles : BaseSpace
 
         Color color = defaultParticleColor;
 
-		if (Cover != null)
-		{
-			Image coverImage = Cover.GetImage();
+        if (Cover != null)
+        {
+            Image coverImage = Cover.GetImage();
 
             if (coverImage.IsCompressed())
             {
@@ -54,29 +58,36 @@ public partial class Squircles : BaseSpace
             }
 
             Vector3 avg = Vector3.Zero;
-			int pixelCount = 0;
+            int pixelCount = 0;
 
-			for (int x = 0; x < coverImage.GetWidth(); x++)
-			{
-				for (int y = 0; y < coverImage.GetHeight(); y++)
-				{
-					Color pixel = coverImage.GetPixel(x, y);
+            for (int x = 0; x < coverImage.GetWidth(); x++)
+            {
+                for (int y = 0; y < coverImage.GetHeight(); y++)
+                {
+                    Color pixel = coverImage.GetPixel(x, y);
 
-					if (pixel.A == 0)
-					{
-						continue;
-					}
+                    if (pixel.A == 0)
+                    {
+                        continue;
+                    }
 
-					avg += new Vector3(pixel.R, pixel.G, pixel.B);
-					pixelCount++;
-				}
-			}
+                    avg += new Vector3(pixel.R, pixel.G, pixel.B);
+                    pixelCount++;
+                }
+            }
 
-			avg /= pixelCount;
-			color = new(avg.X, avg.Y, avg.Z);
-		}
+            avg /= pixelCount;
+            color = new(avg.X, avg.Y, avg.Z);
+        }
 
-        worldEnvironment.Environment.BackgroundColor = Cover != null ? color.Darkened(0.9f) : defaultEnvironmentColor;
+        updateColor(color);
+    }
+
+    private void updateColor(Color color)
+    {
+        Color darkened = color.Darkened(0.9f);
+
+        worldEnvironment.Environment.BackgroundColor = Playing ? darkened : (Cover != null ? darkened : defaultEnvironmentColor);
         particlesNear.Color = color.Lightened(0.1f);
         particlesFar.Color = particlesNear.Color;
     }

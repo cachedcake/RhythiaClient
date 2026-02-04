@@ -1018,6 +1018,8 @@ public partial class LegacyRunner : BaseScene
 			return;
 		}
 
+        cursor.RotationDegrees += Vector3.Back * settings.CursorRotation * (float)delta;
+
 		// trail stuff
 		if (settings.CursorTrail)
 		{
@@ -1025,7 +1027,8 @@ public partial class LegacyRunner : BaseScene
 
 			lastCursorPositions.Add(new(){
 				["Time"] = now,
-				["Position"] = CurrentAttempt.CursorPosition
+				["Position"] = CurrentAttempt.CursorPosition,
+                ["Rotation"] = cursor.Rotation.Z
 			});
 
 			foreach (Dictionary<string, object> entry in lastCursorPositions)
@@ -1056,6 +1059,7 @@ public partial class LegacyRunner : BaseScene
 				uint alpha = (uint)(difference / (settings.TrailTime * 1000000) * 255);
 
 				transform.Origin = new Vector3(((Vector2)entry["Position"]).X, ((Vector2)entry["Position"]).Y, 0);
+                transform = transform.RotatedLocal(Vector3.Back, (float)entry["Rotation"]);
 
 				cursorTrailMultimesh.Multimesh.SetInstanceTransform(j, transform);
 				cursorTrailMultimesh.Multimesh.SetInstanceColor(j, Color.FromHtml($"ffffff{255 - alpha:X2}"));

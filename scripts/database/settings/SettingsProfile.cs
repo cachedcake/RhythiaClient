@@ -90,16 +90,22 @@ public partial class SettingsProfile
     public SettingsItem<string> Skin { get; private set; }
 
     /// <summary>
+    /// Overrides the skin's background space for the menu
+    /// </summary>
+    [Order]
+    public SettingsItem<string> MenuSpace { get; private set; }
+
+    /// <summary>
     /// Overrides the skin's background space for the game
     /// </summary>
     [Order]
     public SettingsItem<string> GameSpace { get; private set; }
 
     /// <summary>
-    /// Overrides the skin's background space for the menu
+    /// Toggles note hit effects for the game space
     /// </summary>
     [Order]
-    public SettingsItem<string> MenuSpace { get; private set; }
+    public SettingsItem<bool> SpaceHitEffects { get; private set; }
 
     /// <summary>
     /// Overrides the skin's colorset
@@ -130,6 +136,12 @@ public partial class SettingsProfile
     /// </summary>
     [Order]
     public SettingsItem<float> CursorScale { get; private set; }
+
+    /// <summary>
+    /// Degrees to rotate the cursor by every second
+    /// </summary>
+    [Order]
+    public SettingsItem<int> CursorRotation { get; private set; }
 
     /// <summary>
     /// Toggles a trial for your cursor
@@ -420,6 +432,19 @@ public partial class SettingsProfile
             }
         };
 
+        MenuSpace = new("skin")
+        {
+            Id = "MenuSpace",
+            Title = "Menu Space",
+            Description = "Overrides the skin's background space for the menu",
+            Section = SettingsSection.Visual,
+            UpdateAction = _ => SkinManager.Load(),
+            List = new("skin")
+            {
+                Values = [ "skin", "void", "grid", "squircles", "waves" ]
+            }
+        };
+
         GameSpace = new("skin")
         {
             Id = "GameSpace",
@@ -433,17 +458,12 @@ public partial class SettingsProfile
             }
         };
 
-        MenuSpace = new("skin")
+        SpaceHitEffects = new(true)
         {
-            Id = "MenuSpace",
-            Title = "Menu Space",
-            Description = "Overrides the skin's background space for the menu",
-            Section = SettingsSection.Visual,
-            UpdateAction = _ => SkinManager.Load(),
-            List = new("skin")
-            {
-                Values = [ "skin", "void", "grid", "squircles", "waves" ]
-            }
+            Id = "SpaceHitEffects",
+            Title = "Space Hit Effects",
+            Description = "Toggles note hit effects for the game space",
+            Section = SettingsSection.Visual
         };
 
         NoteColors = new("skin")
@@ -511,6 +531,20 @@ public partial class SettingsProfile
                 Step = 0.025f,
                 MinValue = 0,
                 MaxValue = 4
+            }
+        };
+
+        CursorRotation = new(0)
+        {
+            Id = "CursorRotation",
+            Title = "Cursor Rotation",
+            Description = "Degrees to rotate the cursor by every second",
+            Section = SettingsSection.Visual,
+            Slider = new()
+            {
+                Step = 1,
+                MinValue = -360,
+                MaxValue = 360
             }
         };
 
@@ -586,7 +620,7 @@ public partial class SettingsProfile
             }
         };
 
-        SimpleHUD = new(true)
+        SimpleHUD = new(false)
         {
             Id = "SimpleHUD",
             Title = "Simple HUD",

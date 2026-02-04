@@ -38,7 +38,7 @@ public partial class Waves : BaseSpace
 	public override void _Process(double delta)
 	{
         base._Process(delta);
-		
+
         if (!Playing)
 		{
 			Viewport viewport = GetViewport();
@@ -47,7 +47,7 @@ public partial class Waves : BaseSpace
 			environment.SkyRotation += Vector3.Up * (float)delta * centerOffset.X / 50000;
 		}
 	}
-	
+
 	public override void UpdateMap(Map map)
 	{
 		base.UpdateMap(map);
@@ -61,4 +61,15 @@ public partial class Waves : BaseSpace
 			skyMaterial.SetShaderParameter("image_lerp", alpha);
 		}), 0.0, 1.0, 0.2);
 	}
+
+    public override void UpdateState(bool playing)
+    {
+        base.UpdateState(playing);
+
+        if (Playing)
+        {
+            skyMaterial.SetShaderParameter("image_a", empty);
+		    skyMaterial.SetShaderParameter("image_lerp", 0.0);
+        }
+    }
 }

@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.IO;
 
 public partial class BaseSpace : Node3D
@@ -8,6 +9,7 @@ public partial class BaseSpace : Node3D
     public Camera3D Camera;
     public WorldEnvironment WorldEnvironment;
     public ImageTexture Cover;
+    public Color NoteHitColor = new(1, 1, 1);
 
     public override void _Ready()
     {
@@ -15,6 +17,16 @@ public partial class BaseSpace : Node3D
 
         Camera = GetNode<Camera3D>("Camera3D");
         WorldEnvironment = GetNode<WorldEnvironment>("WorldEnvironment");
+    }
+
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+
+        if (Playing && SettingsManager.Instance.Settings.SpaceHitEffects)
+        {
+            NoteHitColor = NoteHitColor.Lerp(LegacyRunner.CurrentAttempt.LastHitColour, Math.Min(1, (float)delta * 8));
+        }
     }
 
     public virtual void UpdateMap(Map map)

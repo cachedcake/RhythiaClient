@@ -31,7 +31,6 @@ buses/default_bus_layout="uid://byxtiup0hs2og"
 
 [autoload]
 
-ObjExporter="*uid://dwc7rp27qdstt"
 Constants="*res://scripts/Constants.cs"
 FileInitializer="*uid://dp48xgqpesoue"
 DatabaseService="*uid://c4t8bmpg1wmnv"

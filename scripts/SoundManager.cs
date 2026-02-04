@@ -66,38 +66,34 @@ public partial class SoundManager : Node, ISkinnable
 
         SettingsManager.Instance.Loaded += UpdateVolume;
         Lobby.Instance.SpeedChanged += (speed) => { SoundManager.Song.PitchScale = (float)speed; };
-        MapManager.Selected.ValueChanged += (_, _) => {
-            var map = MapManager.Selected.Value;
-            
+        MapManager.Selected.ValueChanged += (_, selected) => {
+            var map = selected.Value;
+
             if (Map == null || Map.Name != map.Name)
             {
                 PlayJukebox(map);
             }
         };
 
-        if (MapManager.Initialized)
+        UpdateVolume();
+
+        static void start()
         {
-            UpdateVolume();
             UpdateJukeboxQueue();
 
             if (SettingsManager.Instance.Settings.AutoplayJukebox)
             {
-                PlayJukebox();
+                PlayJukebox(new Random().Next(0, JukeboxQueue.Length));
             }
+        }
 
+        if (MapManager.Initialized)
+        {
+            start();
             return;
         }
 
-        MapManager.MapsInitialized += (_) =>
-        {
-            UpdateVolume();
-            UpdateJukeboxQueue();
-
-            if (SettingsManager.Instance.Settings.AutoplayJukebox)
-            {
-                PlayJukebox();
-            }
-        };
+        MapManager.MapsInitialized += _ => start();
     }
 
     public override void _Process(double delta)
@@ -146,12 +142,6 @@ public partial class SoundManager : Node, ISkinnable
         }
     }
 
-    public void UpdateSkin(SkinProfile skin)
-    {
-        HitSound.Stream = Util.Audio.LoadStream(skin.HitSoundBuffer);
-        FailSound.Stream = Util.Audio.LoadStream(skin.FailSoundBuffer);
-    }
-
     public static void PlayJukebox(Map map, bool setRichPresence = true)
     {
         Map = map;
@@ -162,6 +152,8 @@ public partial class SoundManager : Node, ISkinnable
             PlayJukebox(JukeboxIndex);
             return;
         }
+
+        JukeboxIndex = MapManager.Maps.FindIndex(x => x.Id == map.Id);
 
         Song.Stream = Util.Audio.LoadFromFile($"{MapUtil.MapsCacheFolder}/{map.Name}/audio.{map.AudioExt}");
         Song.Play();
@@ -201,7 +193,7 @@ public partial class SoundManager : Node, ISkinnable
     {
         var settings = SettingsManager.Instance.Settings;
 
-        Song.VolumeDb = -80 + 80 * (float)Math.Pow(settings.VolumeMusic.Value / 100, 0.1) * (float)Math.Pow(settings.VolumeMaster.Value / 100, 0.1);
+        Song.VolumeDb = -80 + 60 * (float)Math.Pow(settings.VolumeMusic.Value / 100, 0.1) * (float)Math.Pow(settings.VolumeMaster.Value / 100, 0.1);
         HitSound.VolumeDb = -80 + 80 * (float)Math.Pow(settings.VolumeSFX.Value / 100, 0.1) * (float)Math.Pow(settings.VolumeMaster.Value / 100, 0.1);
         FailSound.VolumeDb = -80 + 80 * (float)Math.Pow(settings.VolumeSFX.Value / 100, 0.1) * (float)Math.Pow(settings.VolumeMaster.Value / 100, 0.1);
     }
@@ -209,5 +201,11 @@ public partial class SoundManager : Node, ISkinnable
     public static void UpdateJukeboxQueue()
     {
         JukeboxQueue = [.. MapManager.Maps.Select(x => x.Id)];
+    }
+
+    public void UpdateSkin(SkinProfile skin)
+    {
+        HitSound.Stream = Util.Audio.LoadStream(skin.HitSoundBuffer);
+        FailSound.Stream = Util.Audio.LoadStream(skin.FailSoundBuffer);
     }
 }

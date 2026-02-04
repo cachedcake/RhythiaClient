@@ -63,7 +63,7 @@ public partial class SettingsMenu : ColorRect
         };
 
         updateProfileSelection();
-        
+
         Panel settingTemplate = categoryTemplate.GetNode("Container").GetNode<Panel>("SettingTemplate");
         CheckButton checkButtonTemplate = settingTemplate.GetNode<CheckButton>("CheckButton");
         HSlider sliderTemplate = settingTemplate.GetNode<HSlider>("Slider");
@@ -148,7 +148,7 @@ public partial class SettingsMenu : ColorRect
                     setupList(setting, optionButton);
                     panel.AddChild(optionButton);
                 }
-                
+
                 if (setting.Type == typeof(Variant))
                 {
                 //     Button button = buttonTemplate.Duplicate() as Button;
@@ -228,7 +228,7 @@ public partial class SettingsMenu : ColorRect
         for (int i = 0; i < profiles.Length; i++)
         {
             string name = profiles[i].GetFile().GetBaseName();
-            
+
             if (name != "default")
             {
                 profilesButton.AddItem(name);
@@ -266,6 +266,7 @@ public partial class SettingsMenu : ColorRect
             if ((double)setting.GetVariant() != value) { setting.SetVariant(value); }
         }
 
+        // lineEdit.PlaceholderText = ((SettingsItem<Variant>)setting).DefaultValue.ToString();
         slider.Step = setting.Slider.Step;
         slider.MinValue = setting.Slider.MinValue;
         slider.MaxValue = setting.Slider.MaxValue;
@@ -284,7 +285,7 @@ public partial class SettingsMenu : ColorRect
 	private void updateSlider(HSlider slider, LineEdit lineEdit, double value)
 	{
         lineEdit.Text = value.ToString();
-        
+
         if (lineEdit.IsInsideTree())
         {
             lineEdit.ReleaseFocus();
@@ -306,7 +307,7 @@ public partial class SettingsMenu : ColorRect
         lineEdit.TextSubmitted += (_) => { applyLineEdit(); };
 
         setting.Updated += (value) => { updateInput(lineEdit, (string)value); };
-        
+
         updateInput(lineEdit, (string)setting.GetVariant());
     }
 
@@ -363,6 +364,6 @@ public partial class SettingsMenu : ColorRect
 
     // private void setupButton(ISettingsItem setting, Button button)
     // {
-        
+
     // }
 }
