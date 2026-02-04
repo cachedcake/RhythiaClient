@@ -8,7 +8,7 @@ public partial class FileInitializer : Node
 
     public override void _Ready()
     {
-        var script = GD.Load<Script>("res://scripts/ObjExporter.gd");
+        var script = GD.Load<Script>("res://scripts/OBJExporter.gd");
 
         objExporter = new Node();
         AddChild(objExporter);
