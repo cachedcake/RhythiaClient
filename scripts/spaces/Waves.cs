@@ -66,7 +66,7 @@ public partial class Waves : BaseSpace
     {
         base.UpdateState(playing);
 
-        if (Playing)
+        if (playing)
         {
             skyMaterial.SetShaderParameter("image_a", empty);
 		    skyMaterial.SetShaderParameter("image_lerp", 0.0);

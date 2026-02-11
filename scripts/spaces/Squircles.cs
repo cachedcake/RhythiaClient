@@ -38,7 +38,7 @@ public partial class Squircles : BaseSpace
 			Viewport viewport = GetViewport();
 			Vector2 centerOffset = viewport.GetMousePosition() - viewport.GetVisibleRect().Size / 2;
 
-            Camera.Position = Vector3.Up + new Vector3(centerOffset.X, 0, centerOffset.Y) / 40000;
+            Camera.Position = new Vector3(centerOffset.X, centerOffset.Y, 0) / 40000;
         }
     }
 

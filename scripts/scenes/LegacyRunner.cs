@@ -464,7 +464,8 @@ public partial class LegacyRunner : BaseScene
         menu = GetNode<Panel>("Menu");
         //fpsCounter = GetNode<Label>("FPSCounter");
 
-        SubViewport holder = GetNode("SubViewportContainer").GetNode<SubViewport>("SubViewport");
+        // SubViewport holder = GetNode("SubViewportContainer").GetNode<SubViewport>("SubViewport");
+        Node holder = this;
 
         Camera = holder.GetNode<Camera3D>("Camera3D");
         titleLabel = holder.GetNode<Label3D>("Title");

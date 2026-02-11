@@ -356,6 +356,7 @@ access = 2
 use_native_dialog = true
 
 [node name="Background" type="ColorRect" parent="." unique_id=1217307991]
+visible = false
 material = SubResource("ShaderMaterial_2672j")
 anchors_preset = 15
 anchor_right = 1.0
