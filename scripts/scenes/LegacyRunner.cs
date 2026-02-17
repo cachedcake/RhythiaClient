@@ -1103,8 +1103,10 @@ public partial class LegacyRunner : BaseScene
 					{
 						SettingsManager.HideMenu();
 					}
-
-					ShowMenu(!MenuShown);
+					else
+					{
+						ShowMenu(!MenuShown);
+					}
 
 					break;
 				case Key.Quoteleft:
