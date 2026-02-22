@@ -1574,11 +1574,11 @@ text = "[font_size=20]fog
 fit_content = true
 horizontal_alignment = 1
 
-[node name="cachedcake" type="RichTextLabel" parent="Menus/Extras/Credits/ScrollContainer/VBoxContainer" unique_id=1336553338]
+[node name="cake" type="RichTextLabel" parent="Menus/Extras/Credits/ScrollContainer/VBoxContainer" unique_id=1336553338]
 modulate = Color(0.49546552, 0.9457299, 0.77711904, 1)
 layout_mode = 2
 bbcode_enabled = true
-text = "[font_size=20]cachedcake
+text = "[font_size=20]cake
 [color=ffffffbb][font_size=16]Contributor"
 fit_content = true
 horizontal_alignment = 1
