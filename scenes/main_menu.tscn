@@ -1556,6 +1556,33 @@ text = "[font_size=20]lulusuki
 fit_content = true
 horizontal_alignment = 1
 
+[node name="kiwie" type="RichTextLabel" parent="Menus/Extras/Credits/ScrollContainer/VBoxContainer" unique_id=699076624]
+modulate = Color(1, 0.8156863, 0.53333336, 1)
+layout_mode = 2
+bbcode_enabled = true
+text = "[font_size=20]kiwie
+[color=ffffffbb][font_size=16]Developer"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="fog" type="RichTextLabel" parent="Menus/Extras/Credits/ScrollContainer/VBoxContainer" unique_id=670577229]
+modulate = Color(0.73922217, 0.46258998, 0.9705774, 1)
+layout_mode = 2
+bbcode_enabled = true
+text = "[font_size=20]fog
+[color=ffffffbb][font_size=16]Developer"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="cachedcake" type="RichTextLabel" parent="Menus/Extras/Credits/ScrollContainer/VBoxContainer" unique_id=1336553338]
+modulate = Color(0.49546552, 0.9457299, 0.77711904, 1)
+layout_mode = 2
+bbcode_enabled = true
+text = "[font_size=20]cachedcake
+[color=ffffffbb][font_size=16]Contributor"
+fit_content = true
+horizontal_alignment = 1
+
 [node name="allusionist" type="RichTextLabel" parent="Menus/Extras/Credits/ScrollContainer/VBoxContainer" unique_id=2118833467]
 modulate = Color(0.9814784, 0.7174443, 0.6400969, 1)
 layout_mode = 2
