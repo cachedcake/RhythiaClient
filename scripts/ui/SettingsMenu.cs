@@ -173,7 +173,7 @@ public partial class SettingsMenu : ColorRect
 
         hideButton.Pressed += () => { ShowMenu(false); };
     }
-
+    // Adding GetViewport().SetInputAsHandled() will prevent the Quit popup from appearing when clicking ESC in settings
     public override void _Input(InputEvent @event)
     {
         if (@event is InputEventKey eventKey && eventKey.Pressed)
@@ -181,10 +181,10 @@ public partial class SettingsMenu : ColorRect
             switch (eventKey.Keycode)
             {
                 case Key.O:
-                    if (eventKey.CtrlPressed) { ShowMenu(!Shown); }
+                    if (eventKey.CtrlPressed) { ShowMenu(!Shown); GetViewport().SetInputAsHandled(); }
                     break;
                 case Key.Escape:
-                    if (Shown) { ShowMenu(false); }
+                    if (Shown) { ShowMenu(false); GetViewport().SetInputAsHandled(); }
                     break;
             }
 
