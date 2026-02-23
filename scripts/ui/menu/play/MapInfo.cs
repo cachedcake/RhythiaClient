@@ -50,5 +50,7 @@ public partial class MapInfo : AspectRatioContainer
         holder.AddChild(InfoContainer);
 		InfoContainer.Setup(map);
         InfoContainer.Transition(true);
+        
+        QueueRedraw();
     }
 }
